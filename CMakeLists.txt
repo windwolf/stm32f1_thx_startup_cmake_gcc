@@ -102,3 +102,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/components/components.cmake)
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
+
+# # debug
+# include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-jlink.cmake)
