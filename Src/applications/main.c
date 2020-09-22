@@ -28,6 +28,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "tx_api.h"
+#include "hal_tick.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,6 +91,7 @@ void thread_2_entry(ULONG thread_input);
 void thread_3_and_4_entry(ULONG thread_input);
 void thread_5_entry(ULONG thread_input);
 void thread_6_and_7_entry(ULONG thread_input);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -130,6 +133,12 @@ int main(void)
   MX_TIM4_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  // for (size_t i = 0; i < 10; i++)
+  // {
+
+  // }
+  USART1_Print("begin tx");
   tx_kernel_enter();
   /* USER CODE END 2 */
 
@@ -200,6 +209,8 @@ void tx_application_define(void *first_unused_memory)
 
   /* Allocate the stack for thread 0.  */
   tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+
+  Create_HalTick_Timer();
 
   /* Create the main thread.  */
   tx_thread_create(&thread_0, "thread 0", thread_0_entry, 0,
@@ -304,9 +315,10 @@ void thread_0_entry(ULONG thread_input)
 
     /* Increment the thread counter.  */
     thread_0_counter++;
-
     /* Sleep for 10 ticks.  */
-    tx_thread_sleep(10);
+    tx_thread_sleep(1000);
+    USART1_Print("thread0 running");
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
     /* Set event flag 0 to wakeup thread 5.  */
     status = tx_event_flags_set(&event_flags_0, 0x1, TX_OR);
@@ -478,6 +490,28 @@ void thread_6_and_7_entry(ULONG thread_input)
 }
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM2 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM2)
+  {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
