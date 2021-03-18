@@ -29,6 +29,8 @@
 /* USER CODE BEGIN Includes */
 #include "tx_api.h"
 #include "hal_tick.h"
+#include "common/tracex.h"
+#include "common/log.h"
 
 /* USER CODE END Includes */
 
@@ -134,11 +136,11 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  // for (size_t i = 0; i < 10; i++)
-  // {
 
-  // }
-  USART1_Print("begin tx");
+  LOG("begin trace")
+  TraceX_EnableTrace();
+
+  LOG("begin kernel")
   tx_kernel_enter();
   /* USER CODE END 2 */
 

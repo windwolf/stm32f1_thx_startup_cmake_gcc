@@ -186,6 +186,7 @@
 /*
 #define TX_ENABLE_EVENT_TRACE
 */
+#define TX_ENABLE_EVENT_TRACE
 
 /* Determine if block pool performance gathering is required by the application. When the following is
    defined, ThreadX gathers various block pool performance information. */
