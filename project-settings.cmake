@@ -13,7 +13,7 @@ option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
 
 # cubemx没有集成threadx的情况下, 需要额外包含以下文件
-set(THREADX_ARCH "cortex_m3")
+set(THREADX_ARCH CPU)
 set(THREADX_TOOLCHAIN "gnu")
 set(TX_USER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc/tx_user.h)
 add_project_library(threadx azrtos::threadx)
