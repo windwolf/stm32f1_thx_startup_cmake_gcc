@@ -77,26 +77,37 @@ set(ELF_TARGET ${PROJECT_NAME}.elf)
 
 
 
-message(STATUS "Loading project contents.")
+file(GLOB_RECURSE HAL_DRIVER_HAL_SRC 
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c 
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
+list(FILTER HAL_DRIVER_HAL_SRC EXCLUDE REGEX "(_template.c)$")
 
-message(STATUS "project contents loaded.")
+file(GLOB_RECURSE HAL_DRIVER_LL_SRC 
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_ll_*.c)
+list(FILTER HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
 
-file(GLOB_RECURSE PROJECT_CUBEMX_SOURCES_PATH 
+file(GLOB HAL_CORE_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*.*
-  # ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/*.*
-)
-list(FILTER PROJECT_CUBEMX_SOURCES_PATH EXCLUDE REGEX "template.c$")
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s)
+
+
+if(USE_HAL_LIB)
+    set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_HAL_SRC} ${HAL_DRIVER_LL_SRC})
+else()
+    set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_LL_SRC})
+endif()
 
 
 
-file(GLOB_RECURSE PROJECT_BUILDIN_SOURCES_PATH 
+file(GLOB_RECURSE PROJECT_APP_AND_DRIVER_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/*.*
 )
 
 add_executable(${ELF_TARGET} 
-  ${PROJECT_BUILDIN_SOURCES_PATH}
+  ${HAL_CORE_SRC}
+  ${HAL_DRIVER_LIB_SRC}
+  ${PROJECT_APP_AND_DRIVER_SOURCES_PATH}
   ${PROJECT_SOURCES_PATH}
   ${PROJECT_CUBEMX_SOURCES_PATH}
 )
@@ -105,6 +116,15 @@ target_compile_definitions(${ELF_TARGET}
   PUBLIC 
     -D${MCU_LINE}
 )
+
+if(USE_LL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_FULL_LL_DRIVER)
+endif()
+if(USE_HAL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_HAL_DRIVER)
+endif()
 
 target_link_libraries(${ELF_TARGET} 
   PUBLIC 
