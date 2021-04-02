@@ -29,9 +29,7 @@
 ```
 正常情况下只需修改一遍, cubemx不会覆盖该文件. 如果被覆盖了, 那么需重新该一遍.
 
-### ~~3. 将`startup_stm32XXXXX.s`拷贝到`Src/startup`下~~
-
-~~并将`PendSV_Handler`修改为`__tx_PendSVHandler`, 将`SysTick_Handler`修改为`__tx_SysTickHandler`~~
+### ~~3. 修改`startup_stm32XXXXX.s`, 将`PendSV_Handler`修改为`__tx_PendSVHandler`, 将`SysTick_Handler`修改为`__tx_SysTickHandler`.~~
 
 ### 4. 如果 threadx 出现比较大的升级, 建议把对应 port 中的 tx_initialize_low_level.S 拷过来
 
