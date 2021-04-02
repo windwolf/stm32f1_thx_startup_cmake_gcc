@@ -42,4 +42,6 @@ endif()
 
 message(STATUS "TARGET_MCU: ${TARGET_MCU}")
 message(STATUS "MCU_SERIES: ${MCU_SERIES}")
-message(STATUS "MCU_LINE: ${MCU_LINE}")
+message(STATUS "CPU: ${CPU}")
+message(STATUS "FPU: ${FPU}")
+message(STATUS "FLOAT_ABI: ${FLOAT_ABI}")

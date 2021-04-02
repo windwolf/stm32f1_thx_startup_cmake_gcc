@@ -29,8 +29,7 @@ file(GLOB_RECURSE __TEMP_LD__
     )
 list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 
-# 导入目标对应的变量或者选项
-include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
+
 
 
 
