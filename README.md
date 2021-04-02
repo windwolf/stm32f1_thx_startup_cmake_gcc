@@ -29,15 +29,17 @@
 ```
 正常情况下只需修改一遍, cubemx不会覆盖该文件. 如果被覆盖了, 那么需重新该一遍.
 
-### ~~3. 修改`startup_stm32XXXXX.s`, 将`PendSV_Handler`修改为`__tx_PendSVHandler`, 将`SysTick_Handler`修改为`__tx_SysTickHandler`.~~
 
-### 4. 如果 threadx 出现比较大的升级, 建议把对应 port 中的 tx_initialize_low_level.S 拷过来
+### 3. 修改 project-settings.cmake
+
+- PROJECT_NAME
+- TARGET_MCU
+
+
+## 其他
+
+### 如果 threadx 出现比较大的升级, 建议把对应 port 中的 tx_initialize_low_level.S 复制到Src中
 
 - 将其中的\_vectors 修改为 g_pfnVectors
 - 将其中的 SYSTEM_CLOCK 修改为实际处理器频率
 
-
-### 5. 修改 project-settings.cmake
-
-- PROJECT_NAME
-- TARGET_MCU
