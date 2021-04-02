@@ -2,7 +2,7 @@
 # | 这个文件是所有cmake结构的组织者, 不要随意改动      |
 # =================NOTE================================
 # CMAKE版本检查
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.17.0)
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 # 防止启动检测
@@ -12,15 +12,27 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(CROSS_COMPILE_PREFIX arm-none-eabi)
 include(${CMAKE_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake)
 
+include(${CMAKE_SOURCE_DIR}/cmake/utilities.cmake)
+
+list(APPEND PROJECT_SOURCES_PATH)
+list(APPEND PROJECT_INCLUDES_PATH)
+list(APPEND PROJECT_LINKS_NAME)
+
 # 导入目标文件定义
 include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 
 project(${PROJECT_NAME} C CXX ASM)
 
+# 获取链接文件
+file(GLOB_RECURSE __TEMP_LD__
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+    )
+list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 
+# 导入目标对应的变量或者选项
 include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
 
-include(${CMAKE_SOURCE_DIR}/cmake/utilities.cmake)
+
 
 message(STATUS "Building project: ${PROJECT_NAME}")
 
@@ -29,8 +41,6 @@ message(STATUS "Building project: ${PROJECT_NAME}")
 if(NOT CMAKE_BUILD_TYPE) 
     set(CMAKE_BUILD_TYPE Debug)
 endif()
-
-
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   message(STATUS "Build type: Debug")
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
@@ -66,25 +76,30 @@ endif()
 
 set(ELF_TARGET ${PROJECT_NAME}.elf)
 
-list(APPEND PROJECT_SOURCES_PATH)
 
-list(APPEND PROJECT_INCLUDES_PATH)
-
-list(APPEND PROJECT_LINKS_NAME)
 
 message(STATUS "Loading project contents.")
-include(project-contents.cmake)
+
 message(STATUS "project contents loaded.")
+
+file(GLOB_RECURSE PROJECT_CUBEMX_SOURCES_PATH 
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
+  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*.*
+  # ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/*.*
+)
+list(FILTER PROJECT_CUBEMX_SOURCES_PATH EXCLUDE REGEX "template.c$")
+
+
 
 file(GLOB_RECURSE PROJECT_BUILDIN_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.*
 )
 
 add_executable(${ELF_TARGET} 
   ${PROJECT_BUILDIN_SOURCES_PATH}
   ${PROJECT_SOURCES_PATH}
+  ${PROJECT_CUBEMX_SOURCES_PATH}
 )
 
 target_compile_definitions(${ELF_TARGET} 
@@ -103,8 +118,16 @@ target_link_libraries(${ELF_TARGET}
     -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
 )
 
+
+
 target_include_directories(${ELF_TARGET}
   PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc/Legacy
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
+
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/inc
     ${PROJECT_INCLUDES_PATH}
@@ -112,6 +135,8 @@ target_include_directories(${ELF_TARGET}
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
+
+message(STATUS "cmake config finish.")
 
 # # debug
 # include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-jlink.cmake)

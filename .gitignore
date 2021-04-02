@@ -54,5 +54,3 @@ dkms.conf
 # 编译输出
 build
 
-# cubemx生成
-cubemx

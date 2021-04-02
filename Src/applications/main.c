@@ -28,7 +28,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "tx_api.h"
-#include "hal_tick.h"
 #include "common/tracex.h"
 #include "common/log.h"
 
@@ -136,7 +135,6 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-
   LOG("begin trace")
   TraceX_EnableTrace();
 
@@ -211,8 +209,6 @@ void tx_application_define(void *first_unused_memory)
 
   /* Allocate the stack for thread 0.  */
   tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-  Create_HalTick_Timer();
 
   /* Create the main thread.  */
   tx_thread_create(&thread_0, "thread 0", thread_0_entry, 0,
@@ -319,7 +315,7 @@ void thread_0_entry(ULONG thread_input)
     thread_0_counter++;
     /* Sleep for 10 ticks.  */
     tx_thread_sleep(1000);
-    USART1_Print("thread0 running");
+    printf("thread0 running");
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
     /* Set event flag 0 to wakeup thread 5.  */
