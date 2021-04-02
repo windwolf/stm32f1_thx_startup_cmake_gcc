@@ -166,6 +166,7 @@ SECTIONS
   ._user_heap_stack :
   {
     . = ALIGN(8);
+    __RAM_segment_used_end__ = .; /* 将 __RAM_segment_used_end__ 设置为内存末尾. threadx要用 */
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
     . = . + _Min_Heap_Size;
