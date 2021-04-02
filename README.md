@@ -29,7 +29,7 @@
 ```
 正常情况下只需修改一遍, cubemx不会覆盖该文件. 如果被覆盖了, 那么需重新该一遍.
 
-###~~ 3. 将`startup_stm32XXXXX.s`拷贝到`Src/startup`下~~
+### ~~3. 将`startup_stm32XXXXX.s`拷贝到`Src/startup`下~~
 
 ~~并将`PendSV_Handler`修改为`__tx_PendSVHandler`, 将`SysTick_Handler`修改为`__tx_SysTickHandler`~~
 
