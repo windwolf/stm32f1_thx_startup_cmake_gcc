@@ -135,10 +135,10 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  LOG("begin trace")
+  LOG("begin trace\n")
   TraceX_EnableTrace();
 
-  LOG("begin kernel")
+  LOG("begin kernel\n")
   tx_kernel_enter();
   /* USER CODE END 2 */
 
@@ -315,7 +315,7 @@ void thread_0_entry(ULONG thread_input)
     thread_0_counter++;
     /* Sleep for 10 ticks.  */
     tx_thread_sleep(1000);
-    printf("thread0 running");
+    printf("thread0 running\n");
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 
     /* Set event flag 0 to wakeup thread 5.  */
