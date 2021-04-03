@@ -1,6 +1,14 @@
 # stm32 cmake project startup
 
-## 迁移步骤
+## 环境要求
+1. vscode;
+2. make;
+3. CMake; 我用的是3.17.2
+4. arm-gcc; 我用的是GCC for arm-none-eabi 9.3.1;
+5. vscode插件: CMake, CMakeTools;
+6. jlink;
+
+## 适配其他STM32 MCU的步骤
 
 ### 1. 在cubemx目录中, 使用 STM32CubeMx 生成代码.
 
