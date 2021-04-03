@@ -1,4 +1,0 @@
-h
-loadfile startup.hex, 0x8000000
-r
-q
