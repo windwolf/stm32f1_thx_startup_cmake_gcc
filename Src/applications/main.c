@@ -190,19 +190,20 @@ void tx_application_define(void *first_unused_memory)
 
 void thread_0_entry(ULONG thread_input)
 {
-
+  float num = 0.1;
   UINT status;
 
   /* This thread simply sits in while-forever-sleep loop.  */
   while (1)
   {
-
+    num += 0.15;
     /* Increment the thread counter.  */
     thread_0_counter++;
-    /* Sleep for 10 ticks.  */
-    tx_thread_sleep(1000);
+    /* Sleep for 1000 ticks.  */
+    tx_thread_sleep(1000 + (uint32_t)(num * 100));
+
     printf("thread0 running\n");
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+    HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
 
     /* Set event flag 0 to wakeup thread 5.  */
     status = tx_event_flags_set(&event_flags_0, 0x1, TX_OR);
