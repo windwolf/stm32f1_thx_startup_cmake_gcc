@@ -48,7 +48,7 @@ endif()
 
 
 ## 设置编译选项
-set(MCU_FLAGS "-mcpu=${CPU} -mthumb ${FPU} ${FLOAT_ABI}")
+set(MCU_FLAGS "-mcpu=${CPU} -mthumb -mfpu=${FPU} -mfloat-abi=${FLOAT_ABI}")
 set(LINK_FLAGS "${MCU_FLAGS} -Wl,--gc-sections")
 set(EXTRA_LINK_FLAGS "-Wl,-Map=${PROJECT_NAME}.map,--cref,--no-warn-mismatch -specs=nano.specs -specs=nosys.specs")
 include(${CMAKE_SOURCE_DIR}/cmake/stm32-gcc-flags.cmake)
