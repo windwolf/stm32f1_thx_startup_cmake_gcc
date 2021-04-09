@@ -34,7 +34,6 @@ file(GLOB_RECURSE __TEMP_LD__
 list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 
 
-
 message(STATUS "Building project: ${PROJECT_NAME}")
 
 
@@ -76,9 +75,6 @@ endif()
 
 
 
-
-
-
 file(GLOB_RECURSE HAL_DRIVER_HAL_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
@@ -104,7 +100,6 @@ endif()
 
 file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
 )
@@ -122,28 +117,6 @@ target_compile_definitions(${ELF_TARGET}
     -D${MCU_LINE}
 )
 
-if(USE_LL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DUSE_FULL_LL_DRIVER)
-endif()
-if(USE_HAL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DUSE_HAL_DRIVER)
-endif()
-
-target_link_libraries(${ELF_TARGET} 
-  PUBLIC 
-    ${PROJECT_LINKS_NAME}
-    -lc -lm -lnosys
-)
-
-target_link_libraries(${ELF_TARGET} 
-  PRIVATE 
-    -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
-)
-
-
-
 target_include_directories(${ELF_TARGET}
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
@@ -153,9 +126,41 @@ target_include_directories(${ELF_TARGET}
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
 
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/inc
     ${PROJECT_INCLUDES_PATH}
 )
+
+# cubemx
+if(USE_LL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_FULL_LL_DRIVER)
+endif()
+if(USE_HAL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_HAL_DRIVER)
+endif()
+
+# libs
+target_link_libraries(${ELF_TARGET} 
+  PUBLIC 
+    ${PROJECT_LINKS_NAME}
+    -lc -lm -lnosys
+)
+
+
+# drivers
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
+target_link_libraries(${ELF_TARGET} 
+  PUBLIC 
+    drivers
+    -lc -lm -lnosys
+)
+
+# ld
+target_link_libraries(${ELF_TARGET} 
+  PRIVATE 
+    -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
+)
+
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)

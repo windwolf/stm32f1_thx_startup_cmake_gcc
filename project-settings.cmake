@@ -16,7 +16,7 @@ option(USE_HAL_LIB "Enable HAL library" ON)
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
 
-
+set(DRIVERS_BSP "STM32F103")
 
 
 # cubemx没有集成threadx的情况下, 需要额外包含以下文件

@@ -5,6 +5,30 @@ function(print_list msghead)
 
 endfunction()
 
+function(list_source_files dir listvar)
+    file(GLOB_RECURSE _t_sources_
+        ${dir}/*.c
+        ${dir}/*.cpp
+        ${dir}/*.s
+        ${dir}/*.S
+    )
+    SET(${listvar} ${_t_sources_} PARENT_SCOPE)
+endfunction()
+
+
+function(list_source_directories dir dirsvar)
+    file(GLOB _t_dirs_ LIST_DIRECTORIES true ${dir})
+    SET(_t_dirlist_ "")
+    foreach(_t_dir_ ${_t_dirs_})
+        if(IS_DIRECTORY ${dir}/${_t_dir_})
+            if(EXISTS ${dir}/${_t_dir_}/inc)
+                list(APPEND _t_dirlist_ ${_t_dir_})
+            endif()
+        endif()
+    endforeach()
+    SET(${dirsvar} ${_t_dirlist_} PARENT_SCOPE)
+endfunction()
+
 function(add_project_component componentname)
 
     file(GLOB_RECURSE __TEMP_COMPONENT_SRC_PATH
