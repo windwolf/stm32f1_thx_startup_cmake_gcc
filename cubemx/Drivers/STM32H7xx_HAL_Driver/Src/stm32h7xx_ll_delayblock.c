@@ -46,10 +46,11 @@
   *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
+#include "stm32h7xx_ll_delayblock.h"
 
 /** @addtogroup STM32H7xx_HAL_Driver
   * @{
@@ -87,7 +88,6 @@
   * @{
   */
 
-
 /**
   * @brief  Enable the Delay Block instance.
   * @param  DLYBx: Pointer to DLYB instance.
@@ -116,10 +116,10 @@ HAL_StatusTypeDef DelayBlock_Enable(DLYB_TypeDef *DLYBx)
       DLYBx->CFGR = DLYB_MAX_SELECT | (unit_current << DLYB_CFGR_UNIT_Pos);
 
       /* Waiting for a LNG valid value */
-      tickstart =  HAL_GetTick();
+      tickstart = HAL_GetTick();
       while ((DLYBx->CFGR & DLYB_CFGR_LNGF) == 0U)
       {
-        if((HAL_GetTick() - tickstart) >=  DLYB_TIMEOUT)
+        if ((HAL_GetTick() - tickstart) >= DLYB_TIMEOUT)
         {
           return HAL_TIMEOUT;
         }
@@ -135,13 +135,13 @@ HAL_StatusTypeDef DelayBlock_Enable(DLYB_TypeDef *DLYBx)
       else
       {
         /* 1/2 period LOW detected after the HIGH 1/2 period => FULL PERIOD passed*/
-        if((DLYBx->CFGR & lng_mask ) == 0U)
+        if ((DLYBx->CFGR & lng_mask) == 0U)
         {
           /* Save the first result */
-          if( unit == 0U )
+          if (unit == 0U)
           {
             unit = unit_current;
-            sel  = sel_current + 1U;
+            sel = sel_current + 1U;
           }
           break;
         }
@@ -150,10 +150,10 @@ HAL_StatusTypeDef DelayBlock_Enable(DLYB_TypeDef *DLYBx)
   }
 
   /* Apply the Tuning settings */
-  DLYBx->CR   = 0U;
-  DLYBx->CR   = DLYB_CR_DEN | DLYB_CR_SEN;
+  DLYBx->CR = 0U;
+  DLYBx->CR = DLYB_CR_DEN | DLYB_CR_SEN;
   DLYBx->CFGR = sel | (unit << DLYB_CFGR_UNIT_Pos);
-  DLYBx->CR   = DLYB_CR_DEN;
+  DLYBx->CR = DLYB_CR_DEN;
 
   return HAL_OK;
 }
@@ -177,18 +177,17 @@ HAL_StatusTypeDef DelayBlock_Disable(DLYB_TypeDef *DLYBx)
   * @param  Units: Delay units[0..127].
   * @retval HAL status
   */
-HAL_StatusTypeDef DelayBlock_Configure(DLYB_TypeDef *DLYBx,uint32_t PhaseSel, uint32_t Units )
+HAL_StatusTypeDef DelayBlock_Configure(DLYB_TypeDef *DLYBx, uint32_t PhaseSel, uint32_t Units)
 {
   /* Apply the delay settings */
 
-  DLYBx->CR   = 0U;
-  DLYBx->CR   = DLYB_CR_DEN | DLYB_CR_SEN;
+  DLYBx->CR = 0U;
+  DLYBx->CR = DLYB_CR_DEN | DLYB_CR_SEN;
   DLYBx->CFGR = PhaseSel | (Units << DLYB_CFGR_UNIT_Pos);
-  DLYBx->CR   = DLYB_CR_DEN;
+  DLYBx->CR = DLYB_CR_DEN;
 
   return HAL_OK;
 }
-
 
 /**
   * @}

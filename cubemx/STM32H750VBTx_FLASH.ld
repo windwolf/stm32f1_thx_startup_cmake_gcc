@@ -80,6 +80,16 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+  .itcm : 
+  {
+    . = ALIGN(4);
+    *Middlewares/ST/threadx/*(.text)           /* .data sections  */
+    *Middlewares/ST/threadx/*(.text*)          /* .data* sections */
+    *Middlewares/ST/filex/*(.text)
+    *Middlewares/ST/filex/*(.text*)
+    . = ALIGN(4);
+  } >ITCMRAM AT> FLASH
+
   /* The program code and other data goes into FLASH */
   .text :
   {
