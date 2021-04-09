@@ -23,18 +23,15 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 
 project(${PROJECT_NAME} C CXX ASM)
 
-
 # 获取链接文件
 # file(GLOB_RECURSE __TEMP_LD__
 #         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
 #     )
 # list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
-
 file(GLOB_RECURSE __TEMP_LD__
         ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.ld
     )
 list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
-
 
 
 message(STATUS "Building project: ${PROJECT_NAME}")
@@ -78,9 +75,6 @@ endif()
 
 
 
-
-
-
 file(GLOB_RECURSE HAL_DRIVER_HAL_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
@@ -104,18 +98,16 @@ endif()
 
 
 
-file(GLOB_RECURSE PROJECT_APP_STARTUP_SOURCES_PATH 
+file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
-  
 )
 
 add_executable(${ELF_TARGET} 
   ${HAL_CORE_SRC}
   ${HAL_DRIVER_LIB_SRC}
-  ${PROJECT_APP_STARTUP_SOURCES_PATH}
+  ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
   ${PROJECT_SOURCES_PATH}
   ${PROJECT_CUBEMX_SOURCES_PATH}
 )
@@ -125,6 +117,19 @@ target_compile_definitions(${ELF_TARGET}
     -D${MCU_LINE}
 )
 
+target_include_directories(${ELF_TARGET}
+  PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc/Legacy
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
+    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
+    ${PROJECT_INCLUDES_PATH}
+)
+
+# cubemx
 if(USE_LL_LIB)
     target_compile_definitions(${ELF_TARGET} 
         PUBLIC -DUSE_FULL_LL_DRIVER)
@@ -135,32 +140,33 @@ if(USE_HAL_LIB)
 endif()
 
 target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DTX_INCLUDE_USER_DEFINE_FILE)
-target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DFX_INCLUDE_USER_DEFINE_FILE)
+       PUBLIC 
+       -DTX_INCLUDE_USER_DEFINE_FILE
+       -DFX_INCLUDE_USER_DEFINE_FILE
+       )
 
+# libs
 target_link_libraries(${ELF_TARGET} 
   PUBLIC 
     ${PROJECT_LINKS_NAME}
     -lc -lm -lnosys
 )
 
+
+# drivers
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
+target_link_libraries(${ELF_TARGET} 
+  PUBLIC 
+    drivers
+    -lc -lm -lnosys
+)
+
+# ld
 target_link_libraries(${ELF_TARGET} 
   PRIVATE 
     -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
 )
 
-target_include_directories(${ELF_TARGET}
-  PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc/Legacy
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/inc
-    ${PROJECT_INCLUDES_PATH}
-)
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)

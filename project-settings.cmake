@@ -15,7 +15,7 @@ option(USE_HAL_LIB "Enable HAL library" ON)
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
 
-
+set(DRIVERS_BSP "STM32H750s")
 
 
 # cubemx没有集成threadx的情况下, 额外引入
