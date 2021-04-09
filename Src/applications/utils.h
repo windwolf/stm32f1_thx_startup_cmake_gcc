@@ -1,17 +1,17 @@
-#ifndef __log_h__
-#define __log_h__
-
-#include "stdio.h"
+#ifndef __utils_h__
+#define __utils_h__
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+#include "stdio.h"
 #define LOG(fmt, ...) \
     printf(fmt, ##__VA_ARGS__);
 
 #ifdef __cplusplus
 }
 #endif
-#endif // __log_h__
+
+#endif // __utils_h__

@@ -57,3 +57,5 @@ list(APPEND PROJECT_INCLUDES_PATH
 
 # TODO: 内部组件
 add_project_component(common)
+# add_project_component(uart_print)
+add_project_component(rtt_print)

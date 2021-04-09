@@ -4,7 +4,7 @@
 
 #include "tx_api.h"
 #include "common/tracex.h"
-#include "common/log.h"
+#include "utils.h"
 
 #define DEMO_STACK_SIZE 1024
 #define DEMO_BYTE_POOL_SIZE 9120
@@ -77,7 +77,7 @@ int main(void)
 
   while (1)
   {
-  }
+    }
 }
 
 /* Define what the initial system looks like.  */

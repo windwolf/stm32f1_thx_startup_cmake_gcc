@@ -6,6 +6,8 @@
         "stm32h7xx_hal.h": "c",
         "stm32h7xx_hal_conf.h": "c",
         "stm32h7xx_ll_bus.h": "c",
-        "stm32h7xx_ll_delayblock.h": "c"
+        "stm32h7xx_ll_delayblock.h": "c",
+        "utils.h": "c",
+        "log.h": "c"
     }
 }
