@@ -26,3 +26,5 @@ add_project_library(threadx azrtos::threadx)
 
 # TODO: 内部组件
 add_project_component(common)
+# add_project_component(uart_print)
+add_project_component(rtt_print)
