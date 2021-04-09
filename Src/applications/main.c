@@ -47,25 +47,13 @@ void thread_3_and_4_entry(ULONG thread_input);
 void thread_5_entry(ULONG thread_input);
 void thread_6_and_7_entry(ULONG thread_input);
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
+
 int main(void)
 {
-  /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
 
@@ -80,7 +68,6 @@ int main(void)
     }
 }
 
-/* Define what the initial system looks like.  */
 
 void tx_application_define(void *first_unused_memory)
 {
