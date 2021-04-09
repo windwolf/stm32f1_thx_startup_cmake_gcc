@@ -7,6 +7,9 @@ set(TARGET_MCU "STM32F103C8T6")
 # 导入目标对应的变量或者选项. 这行不要动
 include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
 
+
+set(ELF_TARGET ${PROJECT_NAME}.elf)
+
 option(USE_LL_LIB "Enable LL library" ON)
 option(USE_HAL_LIB "Enable HAL library" ON)
 

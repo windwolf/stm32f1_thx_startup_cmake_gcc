@@ -24,12 +24,14 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 project(${PROJECT_NAME} C CXX ASM)
 
 # 获取链接文件
+# file(GLOB_RECURSE __TEMP_LD__
+#         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+#     )
+# list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 file(GLOB_RECURSE __TEMP_LD__
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.ld
     )
 list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
-
-
 
 
 
@@ -73,7 +75,7 @@ if(USE_SYSTEM_VIEW)
 endif()
 
 
-set(ELF_TARGET ${PROJECT_NAME}.elf)
+
 
 
 
@@ -88,7 +90,8 @@ list(FILTER HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
 
 file(GLOB HAL_CORE_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s)
+  #${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
+  )
 
 
 if(USE_HAL_LIB)
@@ -99,15 +102,17 @@ endif()
 
 
 
-file(GLOB_RECURSE PROJECT_APP_AND_DRIVER_SOURCES_PATH 
+file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/*.*
+  ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
+  ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
 )
 
 add_executable(${ELF_TARGET} 
   ${HAL_CORE_SRC}
   ${HAL_DRIVER_LIB_SRC}
-  ${PROJECT_APP_AND_DRIVER_SOURCES_PATH}
+  ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
   ${PROJECT_SOURCES_PATH}
   ${PROJECT_CUBEMX_SOURCES_PATH}
 )
