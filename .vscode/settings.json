@@ -8,6 +8,12 @@
         "stm32h7xx_ll_bus.h": "c",
         "stm32h7xx_ll_delayblock.h": "c",
         "utils.h": "c",
-        "log.h": "c"
+        "log.h": "c",
+        "main.h": "c",
+        "dcmi.h": "c",
+        "usart.h": "c",
+        "stdint.h": "c",
+        "demo.h": "c",
+        "tx_api.h": "c"
     }
 }

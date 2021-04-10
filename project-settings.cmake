@@ -15,6 +15,10 @@ option(USE_HAL_LIB "Enable HAL library" ON)
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
 
+option(USE_FULL_ASSERT "Use full assert" OFF)
+
+
+
 set(DRIVERS_BSP "STM32H750s")
 
 

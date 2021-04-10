@@ -129,16 +129,6 @@ target_include_directories(${ELF_TARGET}
     ${PROJECT_INCLUDES_PATH}
 )
 
-# cubemx
-if(USE_LL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DUSE_FULL_LL_DRIVER)
-endif()
-if(USE_HAL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
-        PUBLIC -DUSE_HAL_DRIVER)
-endif()
-
 target_compile_definitions(${ELF_TARGET} 
        PUBLIC 
        -DTX_INCLUDE_USER_DEFINE_FILE
@@ -167,6 +157,20 @@ target_link_libraries(${ELF_TARGET}
     -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
 )
 
+# cubemx
+if(USE_LL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_FULL_LL_DRIVER)
+endif()
+if(USE_HAL_LIB)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_HAL_DRIVER)
+endif()
+
+if(USE_FULL_ASSERT)
+    target_compile_definitions(${ELF_TARGET} 
+        PUBLIC -DUSE_FULL_ASSERT)
+endif()
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
