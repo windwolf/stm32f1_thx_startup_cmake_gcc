@@ -6,22 +6,22 @@
 #include "common/tracex.h"
 #include "utils.h"
 #include "demo.h"
+#include "gpio.hpp"
+#include "ring_buffer.hpp"
+
+using namespace Windwolf::Common;
 
 extern "C" void SystemClock_Config(void);
+uint8_t bufdata[1];
 
-class A
-{
-public:
-  A(){
-      LOG("A::A\n") };
-  void log(){
-      LOG("A::log\n") };
-};
 
 int main(void)
 {
-  A a;
-  a.log();
+  
+  RingBuffer<uint8_t> buf(bufdata, 1);
+  if (buf.IsEmpty()) {
+    buf.Enqueue(bufdata, 1, true);
+  }
   HAL_Init();
   SystemClock_Config();
 

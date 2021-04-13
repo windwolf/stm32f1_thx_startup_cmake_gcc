@@ -22,6 +22,7 @@ list(APPEND PROJECT_LINKS_NAME)
 include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 
 project(${PROJECT_NAME} C CXX ASM)
+set(CMAKE_CXX_STANDARD 17)
 
 # 获取链接文件
 # file(GLOB_RECURSE __TEMP_LD__
@@ -74,7 +75,6 @@ if(USE_SYSTEM_VIEW)
 endif()
 
 
-
 file(GLOB_RECURSE HAL_DRIVER_HAL_SRC 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c 
   ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
@@ -97,14 +97,13 @@ else()
 endif()
 
 
-
 file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH 
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
   ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
 )
 
-add_executable(${ELF_TARGET} 
+add_executable(${PROJECT_NAME} 
   ${HAL_CORE_SRC}
   ${HAL_DRIVER_LIB_SRC}
   ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
@@ -112,12 +111,12 @@ add_executable(${ELF_TARGET}
   ${PROJECT_CUBEMX_SOURCES_PATH}
 )
 
-target_compile_definitions(${ELF_TARGET} 
+target_compile_definitions(${PROJECT_NAME} 
   PUBLIC 
     -D${MCU_LINE}
 )
 
-target_include_directories(${ELF_TARGET}
+target_include_directories(${PROJECT_NAME}
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
@@ -129,14 +128,14 @@ target_include_directories(${ELF_TARGET}
     ${PROJECT_INCLUDES_PATH}
 )
 
-target_compile_definitions(${ELF_TARGET} 
+target_compile_definitions(${PROJECT_NAME} 
        PUBLIC 
        -DTX_INCLUDE_USER_DEFINE_FILE
        -DFX_INCLUDE_USER_DEFINE_FILE
        )
 
 # libs
-target_link_libraries(${ELF_TARGET} 
+target_link_libraries(${PROJECT_NAME} 
   PUBLIC 
     ${PROJECT_LINKS_NAME}
     -lc -lm -lnosys
@@ -145,30 +144,32 @@ target_link_libraries(${ELF_TARGET}
 
 # drivers
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
-target_link_libraries(${ELF_TARGET} 
+target_link_libraries(${PROJECT_NAME} 
   PUBLIC 
     drivers
-    -lc -lm -lnosys
 )
+# include(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/drivers.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/bsp_osport.cmake)
+
 
 # ld
-target_link_libraries(${ELF_TARGET} 
+target_link_libraries(${PROJECT_NAME} 
   PRIVATE 
     -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
 )
 
 # cubemx
 if(USE_LL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
+    target_compile_definitions(${PROJECT_NAME} 
         PUBLIC -DUSE_FULL_LL_DRIVER)
 endif()
 if(USE_HAL_LIB)
-    target_compile_definitions(${ELF_TARGET} 
+    target_compile_definitions(${PROJECT_NAME} 
         PUBLIC -DUSE_HAL_DRIVER)
 endif()
 
 if(USE_FULL_ASSERT)
-    target_compile_definitions(${ELF_TARGET} 
+    target_compile_definitions(${PROJECT_NAME} 
         PUBLIC -DUSE_FULL_ASSERT)
 endif()
 

@@ -6,7 +6,7 @@ set(TARGET_MCU "STM32H750VBT6")
 
 # 导入目标对应的变量或者选项. 这行不要动
 include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
-set(ELF_TARGET ${PROJECT_NAME}.elf)
+
 
 
 option(USE_LL_LIB "Enable LL library" OFF)
@@ -18,8 +18,8 @@ option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 option(USE_FULL_ASSERT "Use full assert" OFF)
 
 
-
-set(DRIVERS_BSP "STM32H750s")
+set(DRIVERS_OS "threadx")
+set(DRIVERS_BSP "STM32H750")
 
 
 # cubemx没有集成threadx的情况下, 额外引入

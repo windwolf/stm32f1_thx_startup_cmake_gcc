@@ -56,4 +56,5 @@ dkms.conf
 
 # 编译输出
 build
-
+cmake-build-debug
+.idea
