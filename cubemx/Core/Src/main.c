@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dcmi.h"
+#include "dma.h"
 #include "i2c.h"
 #include "quadspi.h"
 #include "sdmmc.h"

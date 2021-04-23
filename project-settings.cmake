@@ -9,7 +9,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
 
 
 
-option(USE_LL_LIB "Enable LL library" OFF)
+option(USE_LL_LIB "Enable LL library" ON)
 option(USE_HAL_LIB "Enable HAL library" ON)
 
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)

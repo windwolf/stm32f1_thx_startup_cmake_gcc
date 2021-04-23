@@ -1,6 +1,8 @@
 #include "demo.h"
 #include "stdint.h"
 #include "stdio.h"
+#include "stm32h7xx_hal_uart.h"
+#include "usart.h"
 
 void tx_application_define(void *first_unused_memory)
 {
@@ -123,8 +125,8 @@ void thread_0_entry(ULONG thread_input)
         tx_thread_sleep(1000 + (uint32_t)(num * 100));
 
         printf("thread0 running\n");
-        HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
-
+        //HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
+        HAL_UART_Transmit(&huart1, memory_area, 10, HAL_MAX_DELAY);
         /* Set event flag 0 to wakeup thread 5.  */
         status = tx_event_flags_set(&event_flags_0, 0x1, TX_OR);
 

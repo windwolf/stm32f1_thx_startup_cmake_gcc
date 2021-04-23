@@ -24,6 +24,9 @@
         "tuple": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "cstdint": "c"
+        "cstdint": "c",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "string": "cpp"
     }
 }
