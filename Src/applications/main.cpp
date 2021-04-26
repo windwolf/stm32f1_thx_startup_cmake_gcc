@@ -16,7 +16,7 @@ using namespace Windwolf::Drivers;
 using namespace Windwolf::Drivers::Bsp;
 using namespace Windwolf::Drivers::OsPort;
 
-
+extern UART_HandleTypeDef huart4;
 uint8_t bufdata[1];
 
 
@@ -32,10 +32,8 @@ extern "C" int main(void) {
     tx_kernel_enter();
 
     while (1) {
-        STM32H7xxUartDeviceHandle uartHandle;
 
-        STM32H7xxUartDevice uartDevice(&uartHandle);
-        STM32H7xxUartDeviceHandle_Init(&uartHandle, &uartDevice);
+        STM32H7xxUartDevice uartDevice(&huart4);
 
         ThreadxOsSync txsync(nullptr, 0);
         WaitHandle txwh(txsync);

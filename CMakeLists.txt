@@ -31,7 +31,7 @@ set(CMAKE_CXX_STANDARD 17)
 # list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 file(GLOB_RECURSE __TEMP_LD__
         ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.ld
-    )
+        )
 list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 
 
@@ -39,14 +39,14 @@ message(STATUS "Building project: ${PROJECT_NAME}")
 
 
 # 设置BUILD_TYPE
-if(NOT CMAKE_BUILD_TYPE) 
+if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
-endif()
-if(CMAKE_BUILD_TYPE MATCHES Debug)
-  message(STATUS "Build type: Debug")
-elseif(CMAKE_BUILD_TYPE MATCHES Release)
-  message(STATUS "Build type: Release")
-endif()
+endif ()
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    message(STATUS "Build type: Debug")
+elseif (CMAKE_BUILD_TYPE MATCHES Release)
+    message(STATUS "Build type: Release")
+endif ()
 
 
 ## 设置编译选项
@@ -70,107 +70,107 @@ set(VERSION_MINOR 1 CACHE STRING "Project minor version number.")
 set(VERSION_PATCH 0 CACHE STRING "Project patch version number.")
 
 
-if(USE_SYSTEM_VIEW)
-  add_definitions("-DENABLE_SYSTEMVIEW")
-endif()
+if (USE_SYSTEM_VIEW)
+    add_definitions("-DENABLE_SYSTEMVIEW")
+endif ()
 
 
-file(GLOB_RECURSE HAL_DRIVER_HAL_SRC 
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c 
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
+file(GLOB_RECURSE HAL_DRIVER_HAL_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
 list(FILTER HAL_DRIVER_HAL_SRC EXCLUDE REGEX "(_template.c)$")
 
-file(GLOB_RECURSE HAL_DRIVER_LL_SRC 
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_ll_*.c)
+file(GLOB_RECURSE HAL_DRIVER_LL_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_ll_*.c)
 list(FILTER HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
 
-file(GLOB HAL_CORE_SRC 
-  ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
-  # ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
-  )
+file(GLOB HAL_CORE_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
+        # ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
+        )
 
 
-if(USE_HAL_LIB)
+if (USE_HAL_LIB)
     set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_HAL_SRC} ${HAL_DRIVER_LL_SRC})
-else()
+else ()
     set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_LL_SRC})
-endif()
+endif ()
 
 
-file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH 
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
-  ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
-)
+file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
+        )
 
-add_executable(${PROJECT_NAME} 
-  ${HAL_CORE_SRC}
-  ${HAL_DRIVER_LIB_SRC}
-  ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
-  ${PROJECT_SOURCES_PATH}
-  ${PROJECT_CUBEMX_SOURCES_PATH}
-)
+add_executable(${PROJECT_NAME}
+        ${HAL_CORE_SRC}
+        ${HAL_DRIVER_LIB_SRC}
+        ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
+        ${PROJECT_SOURCES_PATH}
+        ${PROJECT_CUBEMX_SOURCES_PATH}
+        )
 
-target_compile_definitions(${PROJECT_NAME} 
-  PUBLIC 
-    -D${MCU_LINE}
-)
+target_compile_definitions(${PROJECT_NAME}
+        PUBLIC
+        -D${MCU_LINE}
+        )
 
 target_include_directories(${PROJECT_NAME}
-  PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc  
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc/Legacy
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
-    ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Inc/Legacy
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
-    ${PROJECT_INCLUDES_PATH}
-)
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
+        ${PROJECT_INCLUDES_PATH}
+        )
 
-target_compile_definitions(${PROJECT_NAME} 
-       PUBLIC 
-       -DTX_INCLUDE_USER_DEFINE_FILE
-       -DFX_INCLUDE_USER_DEFINE_FILE
-       )
+target_compile_definitions(${PROJECT_NAME}
+        PUBLIC
+        -DTX_INCLUDE_USER_DEFINE_FILE
+        -DFX_INCLUDE_USER_DEFINE_FILE
+        )
 
 # libs
-target_link_libraries(${PROJECT_NAME} 
-  PUBLIC 
-    ${PROJECT_LINKS_NAME}
-    -lc -lm -lnosys
-)
+target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+        ${PROJECT_LINKS_NAME}
+        -lc -lm -lnosys
+        )
 
 
 # drivers
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
-target_link_libraries(${PROJECT_NAME} 
-  PUBLIC 
-    drivers
-)
+target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+        drivers
+        )
 include(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers/bsp_osport.cmake)
 drivers_bsp_osport(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
 
 # ld
-target_link_libraries(${PROJECT_NAME} 
-  PRIVATE 
-    -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
-)
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
+        )
 
 # cubemx
-if(USE_LL_LIB)
-    target_compile_definitions(${PROJECT_NAME} 
-        PUBLIC -DUSE_FULL_LL_DRIVER)
-endif()
-if(USE_HAL_LIB)
-    target_compile_definitions(${PROJECT_NAME} 
-        PUBLIC -DUSE_HAL_DRIVER)
-endif()
+if (USE_LL_LIB)
+    target_compile_definitions(${PROJECT_NAME}
+            PUBLIC -DUSE_FULL_LL_DRIVER)
+endif ()
+if (USE_HAL_LIB)
+    target_compile_definitions(${PROJECT_NAME}
+            PUBLIC -DUSE_HAL_DRIVER)
+endif ()
 
-if(USE_FULL_ASSERT)
-    target_compile_definitions(${PROJECT_NAME} 
-        PUBLIC -DUSE_FULL_ASSERT)
-endif()
+if (USE_FULL_ASSERT)
+    target_compile_definitions(${PROJECT_NAME}
+            PUBLIC -DUSE_FULL_ASSERT)
+endif ()
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
