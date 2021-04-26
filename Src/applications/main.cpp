@@ -1,6 +1,4 @@
 #include "main.h"
-#include "usart.h"
-#include "gpio.h"
 
 #include "tx_api.h"
 #include "common/tracex.h"
@@ -10,21 +8,22 @@
 #include "common/ring_buffer.hpp"
 #include "common/device.hpp"
 #include "common/driver.hpp"
+#include "bsp/uart_device.hpp"
+#include "os_port.hpp"
 
 using namespace Windwolf::Common;
 using namespace Windwolf::Drivers;
+using namespace Windwolf::Drivers::Bsp;
+using namespace Windwolf::Drivers::OsPort;
 
-extern "C" void
-SystemClock_Config(void);
+
 uint8_t bufdata[1];
 
-int main(void) {
 
-    HAL_Init();
-    SystemClock_Config();
+extern "C" int main(void) {
 
-    MX_GPIO_Init();
-    MX_USART1_UART_Init();
+
+    MX_All_Init();
 
     LOG("begin trace\n")
     TraceX_EnableTrace();
@@ -33,7 +32,20 @@ int main(void) {
     tx_kernel_enter();
 
     while (1) {
-        // UartDeviceDriver uartDvr(&huart1);
+        STM32H7xxUartDeviceHandle uartHandle;
+
+        STM32H7xxUartDevice uartDevice(&uartHandle);
+        STM32H7xxUartDeviceHandle_Init(&uartHandle, &uartDevice);
+
+        ThreadxOsSync txsync(nullptr, 0);
+        WaitHandle txwh(txsync);
+        uartDevice.TxAsync(bufdata, 1, &txwh);
+
+        // STM32UartDevice uart();
+        // IoDeviceHandle dh = uart.GetDeviceHandle();
+        // StreamDriver stream(dh);  //dh.registerWaitHandle(tx, rx);
+        // stream.write(xxx);
+        // stream.read(xxx);
         // UartDevice uart(&uartDvr);
         // WaitHandle wh;
         // uint8_t buf[100];
@@ -44,7 +56,7 @@ int main(void) {
         // uart.StartRead(buf, 100, &wh);
         // wh.Wait();
 
-        Windwolf::Drivers::StreamDriver sdrv(nullptr, nullptr);
+        // Windwolf::Drivers::StreamDriver sdrv(nullptr, nullptr);
 
         RingBuffer<uint8_t> buf(bufdata, 1);
         if (buf.IsEmpty()) {
