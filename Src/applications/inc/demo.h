@@ -17,7 +17,6 @@ extern "C"
 #include "stdint.h"
 #include "stdio.h"
 #include "stm32h7xx_hal_uart.h"
-#include <bsp/uart_device_handle.h>
 
 
 #define DEMO_STACK_SIZE 1024
