@@ -55,6 +55,8 @@ list(APPEND PROJECT_INCLUDES_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Middlewares/ST/filex/ports/generic/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/FileX/App
 )
+
+
 # target_compile_definitions(${ELF_TARGET} 
 #         PUBLIC -DFX_INCLUDE_USER_DEFINE_FILE)
 

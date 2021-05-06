@@ -5,7 +5,7 @@
 #ifndef STARTUP_DEMO_H
 #define STARTUP_DEMO_H
 
-#include <common/shared.hpp>
+// #include <common/shared.hpp>
 
 #ifdef __cplusplus
 extern "C"
@@ -39,7 +39,7 @@ void thread_5_entry(ULONG thread_input);
 
 void thread_6_and_7_entry(ULONG thread_input);
 
-extern "C" void tx_application_define(void *first_unused_memory);
+void tx_application_define(void *first_unused_memory);
 
 #ifdef __cplusplus
 }

@@ -149,40 +149,16 @@ SECTIONS
   } >FLASH
 
 
-  .d1_buffer :
-  {
-    . = ALIGN(4);
 
-    *(.d1_buffer)      
-    *(.d1_buffer*)       
 
-    . = ALIGN(4);
-  }>RAM_D1 AT> FLASH
 
-  .d2_buffer :
-  {
-    . = ALIGN(4);
 
-    *(.d1_buffer)      
-    *(.d1_buffer*)       
 
-    . = ALIGN(4);
-  }>RAM_D2 AT> FLASH
 
-  .d3_buffer :
-  {
-    . = ALIGN(4);
-
-    *(.d1_buffer)      
-    *(.d1_buffer*)       
-
-    . = ALIGN(4);
-  }>RAM_D3 AT> FLASH
 
 
   /* used by the startup to initialize data */
   _sidata = LOADADDR(.data);
-
   /* Initialized data sections goes into RAM, load LMA copy after code */
   .data : 
   {
@@ -194,6 +170,42 @@ SECTIONS
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
   } >DTCMRAM AT> FLASH
+
+  _sid1 = LOADADDR(.d1_buffer);
+  .d1_buffer :
+  {
+    . = ALIGN(4);
+    _sd1 = .;
+    *(.d1_buffer)      
+    *(.d1_buffer*)       
+
+    . = ALIGN(4);
+    _ed1 = .;
+  }>RAM_D1 AT> FLASH
+
+_sid2 = LOADADDR(.d2_buffer);
+  .d2_buffer :
+  {
+    . = ALIGN(4);
+_sd2 = .;
+    *(.d2_buffer)      
+    *(.d2_buffer*)       
+
+    . = ALIGN(4);
+    _ed2 = .;
+  }>RAM_D2 AT> FLASH
+
+_sid3 = LOADADDR(.d3_buffer);
+  .d3_buffer :
+  {
+    . = ALIGN(4);
+_sd3 = .;
+    *(.d3_buffer)      
+    *(.d3_buffer*)       
+
+    . = ALIGN(4);
+    _ed3 = .;
+  }>RAM_D3 AT> FLASH
 
   
   /* Uninitialized data section */

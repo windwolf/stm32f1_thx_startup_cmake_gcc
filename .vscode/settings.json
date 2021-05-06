@@ -27,6 +27,11 @@
         "cstdint": "c",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "uart.h": "c",
+        "shared.hpp": "c",
+        "stm32h7xx_hal_uart_ex.h": "c",
+        "*.tcc": "c",
+        "algorithm": "c"
     }
 }
