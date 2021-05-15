@@ -10,6 +10,7 @@
 #include "stm32h7xx_hal_uart_ex.h"
 //#include "basic/ring_buffer.h"
 #include "basic/ring_buffer8.h"
+#include "basic/uart.h"
 // #include "common/gpio.hpp"
 // #include "common/ring_buffer.hpp"
 // #include "common/device.hpp"
@@ -20,7 +21,7 @@
 // using namespace windwolf::drivers;
 // using namespace windwolf::drivers::Bsp;
 
-
+UartDevice uart;
 extern UART_HandleTypeDef huart4;
 DMA1_BUFFER uint8_t txBuf0[64];
 // DMA1_BUFFER uint16_t txBuf0Count = 0;
@@ -95,30 +96,35 @@ int main(void)
     LOG("begin trace\n")
     TraceX_EnableTrace();
 
-    LOG("begin kernel\n")
-    //tx_kernel_enter();
-
-    //RingBuffer_Create(&buffer, testRxBuf, CIRCLE_BUFFER_UNIT_SIZE_1, 64);
     RingBuffer8_Create(&buffer2, testRxBuf, 65);
-    HAL_StatusTypeDef rst;
-    HAL_UART_RegisterRxEventCallback(&huart4, Uart_RxEventCpltCallback__);
-    rst = HAL_UART_Transmit(&huart4, text, strlen(text), 10000);
-    rst = HAL_UART_Transmit_DMA(&huart4, text, strlen(text));
+    UartDevice_Init(&uart, &huart4, &buffer2);
+    UartDevice_StartServer(&uart);
+
+    LOG("begin kernel\n")
+    tx_kernel_enter();
+
+    //     HAL_StatusTypeDef rst;
+    // HAL_UART_RegisterRxEventCallback(&huart4, Uart_RxEventCpltCallback__);
+    // UartDevice_Tx(&uart, text, strlen(text));
+    // UartDevice_WaitForTxComplete(&uart, TX_WAIT_FOREVER);
+    //rst = HAL_UART_Transmit(&huart4, text, strlen(text), 10000);
+    //rst = HAL_UART_Transmit_DMA(&huart4, text, strlen(text));
     //LL_USART_EnableIT_IDLE(huart4.Instance);
-    rst = HAL_UARTEx_ReceiveToIdle_DMA(&huart4, testRxBuf, 65);
-    if (rst)
-    {
-    }
+    // rst = HAL_UARTEx_ReceiveToIdle_DMA(&huart4, testRxBuf, 65);
+    // if (rst)
+    // {
+    // }
     while (1)
     {
-        uint32_t len = RingBuffer8_GetCount(&buffer2);
-        if (len > 0)
-        {
-            RingBuffer8_Read(&buffer2, txBuf0, len);
-            rst = HAL_UART_Transmit_DMA(&huart4, txBuf0, len);
-            HAL_Delay(10);
-            cRead++;
-        }
+
+        // uint32_t len = RingBuffer8_GetCount(&buffer2);
+        // if (len > 0)
+        // {
+        //     RingBuffer8_Read(&buffer2, txBuf0, len);
+        //     rst = HAL_UART_Transmit_DMA(&huart4, txBuf0, len);
+        //     HAL_Delay(10);
+        //     cRead++;
+        // }
 
         // uint32_t len = RingBuffer_GetMemoryLength(&buffer);
         // if (len > 0)

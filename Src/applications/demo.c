@@ -1,9 +1,13 @@
 
 #include "demo.h"
+#include "basic/uart.h"
+#include "basic/ring_buffer8.h"
+#include "mem_layout.h"
 
-
-extern UART_HandleTypeDef huart4;
-
+extern UartDevice uart;
+extern const char *text;
+extern RingBuffer8 buffer2;
+extern uint8_t txBuf0[64];
 TX_THREAD thread_0;
 TX_THREAD thread_1;
 TX_THREAD thread_2;
@@ -31,9 +35,10 @@ ULONG thread_5_counter;
 ULONG thread_6_counter;
 ULONG thread_7_counter;
 
-extern "C" void tx_application_define(void *first_unused_memory) {
+void tx_application_define(void *first_unused_memory)
+{
 
-    CHAR *pointer = nullptr;
+    CHAR *pointer = NULL;
 
     /* Create a byte memory pool from which to allocate the thread stacks.  */
     tx_byte_pool_create(&byte_pool_0, strdup("byte pool 0"), memory_area, DEMO_BYTE_POOL_SIZE);
@@ -42,7 +47,7 @@ extern "C" void tx_application_define(void *first_unused_memory) {
        create information.  */
 
     /* Allocate the stack for thread 0.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     /* Create the main thread.  */
     tx_thread_create(&thread_0, strdup("thread 0"), thread_0_entry, 0,
@@ -50,7 +55,7 @@ extern "C" void tx_application_define(void *first_unused_memory) {
                      1, 1, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the stack for thread 1.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     /* Create threads 1 and 2. These threads pass information through a ThreadX 
        message queue.  It is also interesting to note that these threads have a time
@@ -60,14 +65,14 @@ extern "C" void tx_application_define(void *first_unused_memory) {
                      16, 16, 4, TX_AUTO_START);
 
     /* Allocate the stack for thread 2.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     tx_thread_create(&thread_2, strdup("thread 2"), thread_2_entry, 2,
                      pointer, DEMO_STACK_SIZE,
                      16, 16, 4, TX_AUTO_START);
 
     /* Allocate the stack for thread 3.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     /* Create threads 3 and 4.  These threads compete for a ThreadX counting semaphore.  
        An interesting thing here is that both threads share the same instruction area.  */
@@ -76,14 +81,14 @@ extern "C" void tx_application_define(void *first_unused_memory) {
                      8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the stack for thread 4.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     tx_thread_create(&thread_4, strdup("thread 4"), thread_3_and_4_entry, 4,
                      pointer, DEMO_STACK_SIZE,
                      8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the stack for thread 5.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     /* Create thread 5.  This thread simply pends on an event flag which will be set
        by thread_0.  */
@@ -92,7 +97,7 @@ extern "C" void tx_application_define(void *first_unused_memory) {
                      4, 4, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the stack for thread 6.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     /* Create threads 6 and 7.  These threads compete for a ThreadX mutex.  */
     tx_thread_create(&thread_6, strdup("thread 6"), thread_6_and_7_entry, 6,
@@ -100,14 +105,14 @@ extern "C" void tx_application_define(void *first_unused_memory) {
                      8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the stack for thread 7.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
 
     tx_thread_create(&thread_7, strdup("thread 7"), thread_6_and_7_entry, 7,
                      pointer, DEMO_STACK_SIZE,
                      8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     /* Allocate the message queue.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_QUEUE_SIZE * sizeof(ULONG), TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_QUEUE_SIZE * sizeof(ULONG), TX_NO_WAIT);
 
     /* Create the message queue shared by threads 1 and 2.  */
     tx_queue_create(&queue_0, strdup("queue 0"), TX_1_ULONG, pointer, DEMO_QUEUE_SIZE * sizeof(ULONG));
@@ -122,13 +127,13 @@ extern "C" void tx_application_define(void *first_unused_memory) {
     tx_mutex_create(&mutex_0, strdup("mutex 0"), TX_NO_INHERIT);
 
     /* Allocate the memory for a small block pool.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **) &pointer, DEMO_BLOCK_POOL_SIZE, TX_NO_WAIT);
+    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_BLOCK_POOL_SIZE, TX_NO_WAIT);
 
     /* Create a block memory pool to allocate a message buffer from.  */
     tx_block_pool_create(&block_pool_0, strdup("block pool 0"), sizeof(ULONG), pointer, DEMO_BLOCK_POOL_SIZE);
 
     /* Allocate a block and release the block memory.  */
-    tx_block_allocate(&block_pool_0, (VOID **) &pointer, TX_NO_WAIT);
+    tx_block_allocate(&block_pool_0, (VOID **)&pointer, TX_NO_WAIT);
 
     /* Release the block back to the pool.  */
     tx_block_release(pointer);
@@ -136,21 +141,24 @@ extern "C" void tx_application_define(void *first_unused_memory) {
 
 /* Define the test threads.  */
 
-void thread_0_entry(ULONG thread_input) {
+void thread_0_entry(ULONG thread_input)
+{
     float num = 0.1;
     UINT status;
-
+    UartDevice_Tx(&uart, (uint8_t *)text, strlen(text));
+    UartDevice_WaitForTxComplete(&uart, TX_WAIT_FOREVER);
     /* This thread simply sits in while-forever-sleep loop.  */
-    while (1) {
+    while (1)
+    {
         num += 0.15;
         /* Increment the thread counter.  */
         thread_0_counter++;
         /* Sleep for 1000 ticks.  */
-        tx_thread_sleep(1000 + (uint32_t) (num * 100));
+        tx_thread_sleep(1000 + (uint32_t)(num * 100));
 
         printf("thread0 running\n");
         //HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
-        HAL_UART_Transmit(&CONVERT_REFERENCE(huart4, UART_HandleTypeDef), memory_area, 10, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&CONVERT_REFERENCE(huart4, UART_HandleTypeDef), memory_area, 10, HAL_MAX_DELAY);
         /* Set event flag 0 to wakeup thread 5.  */
         status = tx_event_flags_set(&event_flags_0, 0x1, TX_OR);
 
@@ -160,13 +168,23 @@ void thread_0_entry(ULONG thread_input) {
     }
 }
 
-void thread_1_entry(ULONG thread_input) {
+void thread_1_entry(ULONG thread_input)
+{
 
     UINT status;
 
     /* This thread simply sends messages to a queue shared by thread 2.  */
-    while (1) {
-
+    while (1)
+    {
+        UartDevice_WaitForRxReady(&uart, TX_WAIT_FOREVER);
+        uint32_t len = RingBuffer8_GetCount(&buffer2);
+        if (len > 0)
+        {
+            RingBuffer8_Read(&buffer2, txBuf0, len);
+            UartDevice_Tx(&uart, txBuf0, len);
+            tx_thread_sleep(10);
+            //cRead++;
+        }
         /* Increment the thread counter.  */
         thread_1_counter++;
 
@@ -182,13 +200,15 @@ void thread_1_entry(ULONG thread_input) {
     }
 }
 
-void thread_2_entry(ULONG thread_input) {
+void thread_2_entry(ULONG thread_input)
+{
 
     ULONG received_message;
     UINT status;
 
     /* This thread retrieves messages placed on the queue by thread 1.  */
-    while (1) {
+    while (1)
+    {
 
         /* Increment the thread counter.  */
         thread_2_counter++;
@@ -206,13 +226,15 @@ void thread_2_entry(ULONG thread_input) {
     }
 }
 
-void thread_3_and_4_entry(ULONG thread_input) {
+void thread_3_and_4_entry(ULONG thread_input)
+{
 
     UINT status;
 
     /* This function is executed from thread 3 and thread 4.  As the loop
        below shows, these function compete for ownership of semaphore_0.  */
-    while (1) {
+    while (1)
+    {
 
         /* Increment the thread counter.  */
         if (thread_input == 3)
@@ -239,13 +261,15 @@ void thread_3_and_4_entry(ULONG thread_input) {
     }
 }
 
-void thread_5_entry(ULONG thread_input) {
+void thread_5_entry(ULONG thread_input)
+{
 
     UINT status;
     ULONG actual_flags;
 
     /* This thread simply waits for an event in a forever loop.  */
-    while (1) {
+    while (1)
+    {
 
         /* Increment the thread counter.  */
         thread_5_counter++;
@@ -260,13 +284,15 @@ void thread_5_entry(ULONG thread_input) {
     }
 }
 
-void thread_6_and_7_entry(ULONG thread_input) {
+void thread_6_and_7_entry(ULONG thread_input)
+{
 
     UINT status;
 
     /* This function is executed from thread 6 and thread 7.  As the loop
        below shows, these function compete for ownership of mutex_0.  */
-    while (1) {
+    while (1)
+    {
 
         /* Increment the thread counter.  */
         if (thread_input == 6)
