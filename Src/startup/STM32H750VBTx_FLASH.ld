@@ -86,10 +86,10 @@ SECTIONS
   {
     . = ALIGN(4);
     _sitcm = .;
-    *Middlewares/ST/threadx/*(.text)           /* .data sections  */
-    *Middlewares/ST/threadx/*(.text*)          /* .data* sections */
-    *Middlewares/ST/filex/*(.text)
-    *Middlewares/ST/filex/*(.text*)
+    /* *Middlewares/ST/threadx(.text)           /* .data sections  */
+    /* *Middlewares/ST/threadx/*(.text*)        /*  .data* sections */
+    /* *Middlewares/ST/filex/*(.text) */
+    /* *Middlewares/ST/filex/*(.text*) */
     . = ALIGN(4);
     _eitcm = .;
   } >ITCMRAM AT> FLASH

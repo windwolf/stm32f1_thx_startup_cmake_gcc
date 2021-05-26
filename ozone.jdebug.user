@@ -1,41 +1,44 @@
 
 
-Breakpoint=stm32h7xx_it.c:87:9, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:101:9, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:116:9, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:131:9, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:146:9, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:164:1, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:269:1, State=BP_STATE_DISABLED
-Breakpoint=stm32h7xx_it.c:297:1, State=BP_STATE_DISABLED
-Breakpoint=startup_stm32h750xx.s:120, State=BP_STATE_DISABLED
-OpenDocument="main.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/applications/main.c", Line=24
-OpenDocument="startup_stm32h750xx.s", FilePath="E:/topic/startup/stm32_threadx_startup/Src/startup/startup_stm32h750xx.s", Line=50
-OpenDocument="main.c", FilePath="E:/topic/startup/stm32_threadx_startup/cubemx/Core/Src/main.c", Line=129
-OpenDocument="ring_buffer8.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/drivers/basic/src/ring_buffer8.c", Line=78
+Breakpoint=command_spi.c:56, State=BP_STATE_ON
+Breakpoint=command_spi.c:62, State=BP_STATE_ON
+Breakpoint=command_spi.c:163, State=BP_STATE_DISABLED
+Breakpoint=command_spi.c:176:12, State=BP_STATE_DISABLED
+OpenDocument="demo.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/applications/demo.c", Line=111
+OpenDocument="startup_stm32h750xx.s", FilePath="E:/topic/startup/stm32_threadx_startup/Src/startup/startup_stm32h750xx.s", Line=49
+OpenDocument="tx_thread_schedule.S", FilePath="E:/topic/startup/stm32_threadx_startup/cubemx/Middlewares/ST/threadx/ports/cortex_m7/gnu/src/tx_thread_schedule.S", Line=228
+OpenDocument="main.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/applications/main.c", Line=45
+OpenDocument="stm32h7xx_hal_spi.c", FilePath="E:/topic/startup/stm32_threadx_startup/cubemx/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c", Line=2116
+OpenDocument="command_spi.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/drivers/device/src/command_spi.c", Line=71
+OpenDocument="command.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/drivers/basic/src/command.c", Line=191
+OpenDocument="st7735.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/drivers/st77xx/src/st7735.c", Line=253
+OpenDocument="stm32h7xx_ll_dma.h", FilePath="E:/topic/startup/stm32_threadx_startup/cubemx/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h", Line=827
+OpenDocument="stm32h7xx_hal_dma.c", FilePath="E:/topic/startup/stm32_threadx_startup/cubemx/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c", Line=349
+OpenDocument="st77xx.c", FilePath="E:/topic/startup/stm32_threadx_startup/Src/drivers/st77xx/src/st77xx.c", Line=62
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=LEFT, x=0, y=1, w=128, h=206, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=256, h=381, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=128, h=312, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=1, w=256, h=171, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Memory 1", DockArea=BOTTOM, x=2, y=0, w=340, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2FFFFFE8
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=2, w=256, h=251, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=2, w=256, h=251, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=2, w=256, h=251, TabPos=0, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=2, w=128, h=301, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=491, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
-OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=164, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[166;100;100;100;100;100]
-TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[156;100;100;100;118;100]
-TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[959;100;100;100;252]
-TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Stack Frame";"Source";"PC";"Return Address";"Stack Used"], ColWidths=[111;118;182;100;174;100]
-TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[240;100;100;100;805]
+OpenToolbar="Breakpoints", Floating=0, x=1, y=0
+OpenWindow="Call Stack", DockArea=LEFT, x=0, y=1, w=335, h=236, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=477, h=355, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=335, h=291, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=477, h=107, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Memory 1", DockArea=BOTTOM, x=2, y=0, w=628, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2000009C
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=3, w=477, h=123, TabPos=1, TopOfStack=0, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=3, w=477, h=123, TabPos=0, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=477, h=213, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=2, w=335, h=288, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=909, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=303, h=167, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[138;100;449;100]
+TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[251;100;100;100;118;100]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[166;182;100;100;218;105]
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[959;100;100;100;203]
+TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Stack Frame";"Source";"PC";"Return Address";"Stack Used"], ColWidths=[211;118;182;100;174;100]
+TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[240;100;100;100;476]
 TableHeader="Data Sampling Table", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[100;100]
 TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[112;100;100;100;100;100;100;107;107]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[163;118;259]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[138;100;449;100]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;1007]
 WatchedExpression="testRxBuf", Window=Watched Data 1
 WatchedExpression="txBuf0", Window=Watched Data 1

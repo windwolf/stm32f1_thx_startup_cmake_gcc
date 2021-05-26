@@ -60,11 +60,12 @@ extern DMA_HandleTypeDef hdma_i2c1_rx;
 extern DMA_HandleTypeDef hdma_i2c1_tx;
 extern DMA_HandleTypeDef hdma_spi1_rx;
 extern DMA_HandleTypeDef hdma_spi1_tx;
+extern DMA_HandleTypeDef hdma_spi4_tx;
+extern DMA_HandleTypeDef hdma_spi4_rx;
 extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi4;
 extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart4_tx;
-extern DMA_HandleTypeDef hdma_usart1_rx;
-extern DMA_HandleTypeDef hdma_usart1_tx;
 extern UART_HandleTypeDef huart4;
 extern TIM_HandleTypeDef htim17;
 
@@ -220,7 +221,7 @@ void DMA1_Stream3_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
 
   /* USER CODE END DMA1_Stream3_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  HAL_DMA_IRQHandler(&hdma_spi4_tx);
   /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
 
   /* USER CODE END DMA1_Stream3_IRQn 1 */
@@ -248,7 +249,7 @@ void DMA1_Stream5_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
 
   /* USER CODE END DMA1_Stream5_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  HAL_DMA_IRQHandler(&hdma_spi4_rx);
   /* USER CODE BEGIN DMA1_Stream5_IRQn 1 */
 
   /* USER CODE END DMA1_Stream5_IRQn 1 */
@@ -308,6 +309,20 @@ void UART4_IRQHandler(void)
   /* USER CODE BEGIN UART4_IRQn 1 */
 
   /* USER CODE END UART4_IRQn 1 */
+}
+
+/**
+  * @brief This function handles SPI4 global interrupt.
+  */
+void SPI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI4_IRQn 0 */
+
+  /* USER CODE END SPI4_IRQn 0 */
+  HAL_SPI_IRQHandler(&hspi4);
+  /* USER CODE BEGIN SPI4_IRQn 1 */
+
+  /* USER CODE END SPI4_IRQn 1 */
 }
 
 /**

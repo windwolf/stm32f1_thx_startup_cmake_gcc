@@ -48,7 +48,7 @@ void MX_TIM1_Init(void)
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  if (HAL_TIM_OC_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -59,14 +59,14 @@ void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.OCMode = TIM_OCMODE_FORCED_INACTIVE;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  if (HAL_TIM_OC_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -92,10 +92,10 @@ void MX_TIM1_Init(void)
 
 }
 
-void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* tim_pwmHandle)
+void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* tim_ocHandle)
 {
 
-  if(tim_pwmHandle->Instance==TIM1)
+  if(tim_ocHandle->Instance==TIM1)
   {
   /* USER CODE BEGIN TIM1_MspInit 0 */
 
@@ -135,10 +135,10 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
 
 }
 
-void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
+void HAL_TIM_OC_MspDeInit(TIM_HandleTypeDef* tim_ocHandle)
 {
 
-  if(tim_pwmHandle->Instance==TIM1)
+  if(tim_ocHandle->Instance==TIM1)
   {
   /* USER CODE BEGIN TIM1_MspDeInit 0 */
 

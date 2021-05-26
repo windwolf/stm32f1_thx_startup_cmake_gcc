@@ -12,7 +12,7 @@
             "type": "cortex-debug",
             "servertype": "jlink",
             "interface": "swd",
-            "device": "STM32F103C8"
+            "device": "STM32H750VB"
         }
     ]
 }

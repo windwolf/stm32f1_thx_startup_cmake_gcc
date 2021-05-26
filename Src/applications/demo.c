@@ -1,42 +1,69 @@
 
 #include "demo.h"
-#include "basic/uart.h"
 #include "basic/ring_buffer8.h"
 #include "mem_layout.h"
+#include "basic/stream.h"
+#include "basic/command.h"
+#include "basic/pin.h"
+#include "device/stream_uart.h"
+#include "device/command_spi.h"
+#include "device/pin_gpio.h"
+#include "stm32h7xx_ll_spi.h"
+#include "st77xx/st7735.h"
+#include "common/tracex.h"
 
-extern UartDevice uart;
-extern const char *text;
-extern RingBuffer8 buffer2;
-extern uint8_t txBuf0[64];
+Pin csPin;
+Pin dcPin;
+Stream stream;
+DMA1_BUFFER ST77XX st7735;
+extern UART_HandleTypeDef huart4;
+extern SPI_HandleTypeDef hspi4;
+
+DMA1_BUFFER uint8_t txBuf0[64];
+DMA1_BUFFER uint8_t testRxBuf[65];
+DMA1_BUFFER RingBuffer8 buffer2;
+
+int32_t cWrite = 0;
+int32_t cRead = 0;
+const char *text = "test wolf!";
 TX_THREAD thread_0;
 TX_THREAD thread_1;
-TX_THREAD thread_2;
-TX_THREAD thread_3;
-TX_THREAD thread_4;
-TX_THREAD thread_5;
-TX_THREAD thread_6;
-TX_THREAD thread_7;
-TX_QUEUE queue_0;
-TX_SEMAPHORE semaphore_0;
-TX_MUTEX mutex_0;
-TX_EVENT_FLAGS_GROUP event_flags_0;
+
 TX_BYTE_POOL byte_pool_0;
-TX_BLOCK_POOL block_pool_0;
+
 UCHAR memory_area[DEMO_BYTE_POOL_SIZE];
 
 ULONG thread_0_counter;
 ULONG thread_1_counter;
-ULONG thread_1_messages_sent;
-ULONG thread_2_counter;
-ULONG thread_2_messages_received;
-ULONG thread_3_counter;
-ULONG thread_4_counter;
-ULONG thread_5_counter;
-ULONG thread_6_counter;
-ULONG thread_7_counter;
+
+void init_driver()
+{
+    RingBuffer8_Create(&buffer2, testRxBuf, 65);
+
+    Uart_StreamDevice_Create((StreamDevice *)&stream, &huart4);
+    Stream_Init(&stream, &buffer2);
+    Stream_StartServer(&stream);
+
+    Gpio_PinDevice_Create((PinDevice *)&csPin, GPIOE);
+    Pin_Init(&csPin);
+    csPin.pinMask = GPIO_PIN_11;
+
+    Gpio_PinDevice_Create((PinDevice *)&dcPin, GPIOE);
+    Pin_Init(&dcPin);
+    dcPin.pinMask = GPIO_PIN_13;
+    Spi_CommandDevice_Create(&st7735.commandMaster.device, &hspi4);
+    CommandMaster_Init(&st7735.commandMaster);
+    CommandMaster_ConfigCs(&st7735.commandMaster, &csPin, COMMAND_SELECT_PIN_MODE_UNSELECT);
+    CommandMaster_ConfigDc(&st7735.commandMaster, &dcPin, COMMAND_DATACMD_PIN_MODE_DATA);
+    ST7735_Init(&st7735);
+}
 
 void tx_application_define(void *first_unused_memory)
 {
+    TraceX_EnableTrace();
+    init_driver();
+    // UartDevice_Init(&uart, &huart4, &buffer2);
+    // UartDevice_StartServer(&uart);
 
     CHAR *pointer = NULL;
 
@@ -64,92 +91,54 @@ void tx_application_define(void *first_unused_memory)
                      pointer, DEMO_STACK_SIZE,
                      16, 16, 4, TX_AUTO_START);
 
-    /* Allocate the stack for thread 2.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    tx_thread_create(&thread_2, strdup("thread 2"), thread_2_entry, 2,
-                     pointer, DEMO_STACK_SIZE,
-                     16, 16, 4, TX_AUTO_START);
-
-    /* Allocate the stack for thread 3.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    /* Create threads 3 and 4.  These threads compete for a ThreadX counting semaphore.  
-       An interesting thing here is that both threads share the same instruction area.  */
-    tx_thread_create(&thread_3, strdup("thread 3"), thread_3_and_4_entry, 3,
-                     pointer, DEMO_STACK_SIZE,
-                     8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    /* Allocate the stack for thread 4.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    tx_thread_create(&thread_4, strdup("thread 4"), thread_3_and_4_entry, 4,
-                     pointer, DEMO_STACK_SIZE,
-                     8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    /* Allocate the stack for thread 5.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    /* Create thread 5.  This thread simply pends on an event flag which will be set
-       by thread_0.  */
-    tx_thread_create(&thread_5, strdup("thread 5"), thread_5_entry, 5,
-                     pointer, DEMO_STACK_SIZE,
-                     4, 4, TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    /* Allocate the stack for thread 6.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    /* Create threads 6 and 7.  These threads compete for a ThreadX mutex.  */
-    tx_thread_create(&thread_6, strdup("thread 6"), thread_6_and_7_entry, 6,
-                     pointer, DEMO_STACK_SIZE,
-                     8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    /* Allocate the stack for thread 7.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_STACK_SIZE, TX_NO_WAIT);
-
-    tx_thread_create(&thread_7, strdup("thread 7"), thread_6_and_7_entry, 7,
-                     pointer, DEMO_STACK_SIZE,
-                     8, 8, TX_NO_TIME_SLICE, TX_AUTO_START);
-
-    /* Allocate the message queue.  */
-    tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_QUEUE_SIZE * sizeof(ULONG), TX_NO_WAIT);
-
-    /* Create the message queue shared by threads 1 and 2.  */
-    tx_queue_create(&queue_0, strdup("queue 0"), TX_1_ULONG, pointer, DEMO_QUEUE_SIZE * sizeof(ULONG));
-
-    /* Create the semaphore used by threads 3 and 4.  */
-    tx_semaphore_create(&semaphore_0, strdup("semaphore 0"), 1);
-
-    /* Create the event flags group used by threads 1 and 5.  */
-    tx_event_flags_create(&event_flags_0, strdup("event flags 0"));
-
-    /* Create the mutex used by thread 6 and 7 without priority inheritance.  */
-    tx_mutex_create(&mutex_0, strdup("mutex 0"), TX_NO_INHERIT);
-
     /* Allocate the memory for a small block pool.  */
     tx_byte_allocate(&byte_pool_0, (VOID **)&pointer, DEMO_BLOCK_POOL_SIZE, TX_NO_WAIT);
-
-    /* Create a block memory pool to allocate a message buffer from.  */
-    tx_block_pool_create(&block_pool_0, strdup("block pool 0"), sizeof(ULONG), pointer, DEMO_BLOCK_POOL_SIZE);
-
-    /* Allocate a block and release the block memory.  */
-    tx_block_allocate(&block_pool_0, (VOID **)&pointer, TX_NO_WAIT);
-
-    /* Release the block back to the pool.  */
-    tx_block_release(pointer);
 }
 
 /* Define the test threads.  */
 
+#define LCD_DATA_SIZE 100
+DMA1_BUFFER static uint16_t lcddata[LCD_DATA_SIZE];
+void test05_init()
+{
+    st7735.xOffset = 1;
+    st7735.yOffset = 26;
+    st7735.width = 160;
+    st7735.height = 80;
+    st7735.colorMode = ST7735_COLOR_MODE_16BIT;
+    st7735.orientation = ST7735_DISPLAY_DIRECTION_XY_EXCHANGE_Y_MIRROR | ST7735_DISPLAY_COLOR_DIRECTION_BGR | ST7735_DISPLAY_REFRESH_ORDER_T2B_L2R;
+    ST7735_Reset(&st7735);
+    //ST7735_Inversion(&st7735, 1);
+    for (size_t i = 0; i < LCD_DATA_SIZE; i++)
+    {
+        lcddata[i] = (0xF800);
+    }
+}
+
+void test05()
+{
+    uint16_t color1 = 0x001F;
+    uint16_t color2 = 0xF800;
+
+    ST7735_DrawHLine(&st7735, 10, 10, 20, color1);    //inv:1=red+green; inv:0=sky+pink
+    ST7735_DrawRect(&st7735, 20, 20, 10, 10, color2); //inv:1=blue; inv:0=sky
+    ST7735_DrawRect(&st7735, 40, 20, 10, 10, color1); //inv:1=red; inv:0=yellow
+}
+
 void thread_0_entry(ULONG thread_input)
 {
     float num = 0.1;
-    UINT status;
-    UartDevice_Tx(&uart, (uint8_t *)text, strlen(text));
-    UartDevice_WaitForTxComplete(&uart, TX_WAIT_FOREVER);
+    //UINT status;
+    // UartDevice_Tx(&uart, (uint8_t *)text, strlen(text));
+    // UartDevice_WaitForTxComplete(&uart, TX_WAIT_FOREVER);
+    Stream_Tx(&stream, (uint8_t *)text, strlen(text));
+    Stream_WaitForTxComplete(&stream, TX_WAIT_FOREVER);
+
+    test05_init();
     /* This thread simply sits in while-forever-sleep loop.  */
     while (1)
     {
+        test05();
         num += 0.15;
         /* Increment the thread counter.  */
         thread_0_counter++;
@@ -157,181 +146,37 @@ void thread_0_entry(ULONG thread_input)
         tx_thread_sleep(1000 + (uint32_t)(num * 100));
 
         printf("thread0 running\n");
-        //HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
-        //HAL_UART_Transmit(&CONVERT_REFERENCE(huart4, UART_HandleTypeDef), memory_area, 10, HAL_MAX_DELAY);
-        /* Set event flag 0 to wakeup thread 5.  */
-        status = tx_event_flags_set(&event_flags_0, 0x1, TX_OR);
+        // HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
+        // HAL_UART_Transmit(&CONVERT_REFERENCE(huart4, UART_HandleTypeDef), memory_area, 10, HAL_MAX_DELAY);
 
         /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
+        // if (status != TX_SUCCESS)
+        //     break;
     }
 }
 
 void thread_1_entry(ULONG thread_input)
 {
 
-    UINT status;
+    //UINT status;
 
     /* This thread simply sends messages to a queue shared by thread 2.  */
     while (1)
     {
-        UartDevice_WaitForRxReady(&uart, TX_WAIT_FOREVER);
+        Stream_WaitForRxReady(&stream, TX_WAIT_FOREVER);
         uint32_t len = RingBuffer8_GetCount(&buffer2);
         if (len > 0)
         {
             RingBuffer8_Read(&buffer2, txBuf0, len);
-            UartDevice_Tx(&uart, txBuf0, len);
+            Stream_Tx(&stream, txBuf0, len);
             tx_thread_sleep(10);
             //cRead++;
         }
         /* Increment the thread counter.  */
         thread_1_counter++;
 
-        /* Send message to queue 0.  */
-        status = tx_queue_send(&queue_0, &thread_1_messages_sent, TX_WAIT_FOREVER);
-
-        /* Check completion status.  */
-        if (status != TX_SUCCESS)
-            break;
-
-        /* Increment the message sent.  */
-        thread_1_messages_sent++;
-    }
-}
-
-void thread_2_entry(ULONG thread_input)
-{
-
-    ULONG received_message;
-    UINT status;
-
-    /* This thread retrieves messages placed on the queue by thread 1.  */
-    while (1)
-    {
-
-        /* Increment the thread counter.  */
-        thread_2_counter++;
-
-        /* Retrieve a message from the queue.  */
-        status = tx_queue_receive(&queue_0, &received_message, TX_WAIT_FOREVER);
-
-        /* Check completion status and make sure the message is what we 
-           expected.  */
-        if ((status != TX_SUCCESS) || (received_message != thread_2_messages_received))
-            break;
-
-        /* Otherwise, all is okay.  Increment the received message count.  */
-        thread_2_messages_received++;
-    }
-}
-
-void thread_3_and_4_entry(ULONG thread_input)
-{
-
-    UINT status;
-
-    /* This function is executed from thread 3 and thread 4.  As the loop
-       below shows, these function compete for ownership of semaphore_0.  */
-    while (1)
-    {
-
-        /* Increment the thread counter.  */
-        if (thread_input == 3)
-            thread_3_counter++;
-        else
-            thread_4_counter++;
-
-        /* Get the semaphore with suspension.  */
-        status = tx_semaphore_get(&semaphore_0, TX_WAIT_FOREVER);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
-
-        /* Sleep for 2 ticks to hold the semaphore.  */
-        tx_thread_sleep(2);
-
-        /* Release the semaphore.  */
-        status = tx_semaphore_put(&semaphore_0);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
-    }
-}
-
-void thread_5_entry(ULONG thread_input)
-{
-
-    UINT status;
-    ULONG actual_flags;
-
-    /* This thread simply waits for an event in a forever loop.  */
-    while (1)
-    {
-
-        /* Increment the thread counter.  */
-        thread_5_counter++;
-
-        /* Wait for event flag 0.  */
-        status = tx_event_flags_get(&event_flags_0, 0x1, TX_OR_CLEAR,
-                                    &actual_flags, TX_WAIT_FOREVER);
-
-        /* Check status.  */
-        if ((status != TX_SUCCESS) || (actual_flags != 0x1))
-            break;
-    }
-}
-
-void thread_6_and_7_entry(ULONG thread_input)
-{
-
-    UINT status;
-
-    /* This function is executed from thread 6 and thread 7.  As the loop
-       below shows, these function compete for ownership of mutex_0.  */
-    while (1)
-    {
-
-        /* Increment the thread counter.  */
-        if (thread_input == 6)
-            thread_6_counter++;
-        else
-            thread_7_counter++;
-
-        /* Get the mutex with suspension.  */
-        status = tx_mutex_get(&mutex_0, TX_WAIT_FOREVER);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
-
-        /* Get the mutex again with suspension.  This shows
-           that an owning thread may retrieve the mutex it
-           owns multiple times.  */
-        status = tx_mutex_get(&mutex_0, TX_WAIT_FOREVER);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
-
-        /* Sleep for 2 ticks to hold the mutex.  */
-        tx_thread_sleep(2);
-
-        /* Release the mutex.  */
-        status = tx_mutex_put(&mutex_0);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
-
-        /* Release the mutex again.  This will actually 
-           release ownership since it was obtained twice.  */
-        status = tx_mutex_put(&mutex_0);
-
-        /* Check status.  */
-        if (status != TX_SUCCESS)
-            break;
+        // /* Check completion status.  */
+        // if (status != TX_SUCCESS)
+        //     break;
     }
 }
