@@ -9,10 +9,10 @@ extern "C"
 #endif
 #define TRACEX_BUFFER_SIZE 4096
     static uint8_t tracex_buffer[TRACEX_BUFFER_SIZE];
-
+    static UINT trace_status;
     void TraceX_EnableTrace()
     {
-        tx_trace_enable(tracex_buffer, TRACEX_BUFFER_SIZE, 10);
+        trace_status = tx_trace_enable(tracex_buffer, TRACEX_BUFFER_SIZE, 10);
     }
 
 #ifdef __cplusplus
