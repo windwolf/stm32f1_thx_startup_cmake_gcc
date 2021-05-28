@@ -1,6 +1,8 @@
 #MicroXplorer Configuration settings - do not modify
-CORTEX_M7.CPU_DCache=Disabled
-CORTEX_M7.IPParameters=CPU_DCache
+CORTEX_M7.CPU_DCache=Enabled
+CORTEX_M7.CPU_ICache=Enabled
+CORTEX_M7.IPParameters=CPU_DCache,CPU_ICache,MPU_Control
+CORTEX_M7.MPU_Control=__NULL
 DCMI.IPParameters=JPEGMode
 DCMI.JPEGMode=DCMI_JPEG_DISABLE
 Dma.I2C1_RX.2.Direction=DMA_PERIPH_TO_MEMORY
@@ -508,10 +510,10 @@ SPI1.Direction=SPI_DIRECTION_2LINES
 SPI1.IPParameters=VirtualType,Mode,Direction,BaudRatePrescaler,CalculateBaudRate,DataSize
 SPI1.Mode=SPI_MODE_MASTER
 SPI1.VirtualType=VM_MASTER
-SPI4.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_16
+SPI4.BaudRatePrescaler=SPI_BAUDRATEPRESCALER_4
 SPI4.CLKPhase=SPI_PHASE_1EDGE
 SPI4.CLKPolarity=SPI_POLARITY_LOW
-SPI4.CalculateBaudRate=7.5 MBits/s
+SPI4.CalculateBaudRate=30.0 MBits/s
 SPI4.DataSize=SPI_DATASIZE_8BIT
 SPI4.Direction=SPI_DIRECTION_1LINE
 SPI4.IPParameters=VirtualType,Mode,Direction,CalculateBaudRate,CLKPolarity,CLKPhase,BaudRatePrescaler,DataSize

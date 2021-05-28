@@ -51,10 +51,10 @@ void init_driver()
     Gpio_PinDevice_Create((PinDevice *)&dcPin, GPIOE);
     Pin_Init(&dcPin);
     dcPin.pinMask = GPIO_PIN_13;
-    Spi_CommandDevice_Create(&st7735.commandMaster.device, &hspi4);
-    CommandMaster_Init(&st7735.commandMaster);
-    CommandMaster_ConfigCs(&st7735.commandMaster, &csPin, COMMAND_SELECT_PIN_MODE_UNSELECT);
-    CommandMaster_ConfigDc(&st7735.commandMaster, &dcPin, COMMAND_DATACMD_PIN_MODE_DATA);
+    Spi_PacketIoDevice_Create(&(st7735.command.base.device), &hspi4);
+    SimpleCommand_Init(&st7735.command);
+    CommandBase_ConfigCs(&st7735.command.base, &csPin, COMMAND_SELECT_PIN_MODE_UNSELECT);
+    CommandBase_ConfigDc(&st7735.command.base, &dcPin, COMMAND_DATACMD_PIN_MODE_DATA);
     ST7735_Init(&st7735);
 }
 
@@ -117,12 +117,13 @@ void test05_init()
 
 void test05()
 {
+    uint16_t color0 = 0x28A5;
     uint16_t color1 = 0x001F;
     uint16_t color2 = 0xF800;
-
-    ST7735_DrawHLine(&st7735, 10, 10, 20, color1);    //inv:1=red+green; inv:0=sky+pink
-    ST7735_DrawRect(&st7735, 20, 20, 10, 10, color2); //inv:1=blue; inv:0=sky
-    ST7735_DrawRect(&st7735, 40, 20, 10, 10, color1); //inv:1=red; inv:0=yellow
+    ST7735_DrawRect(&st7735, 0, 0, st7735.width, st7735.width, color0); //inv:1=red; inv:0=yellow
+    ST7735_DrawHLine(&st7735, 10, 10, 20, color1);                      //inv:1=red+green; inv:0=sky+pink
+    ST7735_DrawRect(&st7735, 20, 20, 10, 10, color2);                   //inv:1=blue; inv:0=sky
+    ST7735_DrawRect(&st7735, 40, 20, 10, 10, color1);                   //inv:1=red; inv:0=yellow
 }
 
 void thread_0_entry(ULONG thread_input)

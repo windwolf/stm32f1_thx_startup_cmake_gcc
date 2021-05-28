@@ -56,11 +56,11 @@
 
 int main(void)
 {
-
+    SCB_EnableICache();
+    //SCB_EnableDCache();
     MX_All_Init();
 
     LOG("begin trace\n")
-    
 
     LOG("begin kernel\n")
     tx_kernel_enter();
