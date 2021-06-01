@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "stm32h7xx_hal.h"
 
 extern uint32_t _lditcm;
 extern uint32_t _eitcm;
@@ -12,6 +13,8 @@ void copy_itcm()
     uint32_t start = (uint32_t)(&_sitcm);
     uint32_t len = end - start;
     memcpy(&_sitcm, &_lditcm, len);
+
+    SCB->VTOR = D1_ITCMRAM_BASE;
 }
 
 extern uint32_t _sidata;

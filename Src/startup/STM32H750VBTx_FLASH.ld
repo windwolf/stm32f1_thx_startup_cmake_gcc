@@ -75,17 +75,18 @@ SECTIONS
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
+    _sitcm = .;
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >FLASH
+  } >ITCMRAM AT> FLASH
 
   _lditcm = LOADADDR(.itcm);
 
   .itcm : 
   {
     . = ALIGN(4);
-    _sitcm = .;
+    
     *Middlewares/ST/threadx(.text)           /* .data sections  */
     *Middlewares/ST/threadx/*(.text*)        /*  .data* sections */
     *Middlewares/ST/filex/*(.text)
