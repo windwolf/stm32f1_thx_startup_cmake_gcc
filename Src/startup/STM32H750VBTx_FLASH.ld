@@ -72,21 +72,24 @@ FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 128K
 /* Define output sections */
 SECTIONS
 {
+
+  _ldisr = LOADADDR(.isr_vector);
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
-    _sitcm = .;
+    _sisr = .;
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
+    _eisr = .;
   } >ITCMRAM AT> FLASH
 
+  
   _lditcm = LOADADDR(.itcm);
-
   .itcm : 
   {
     . = ALIGN(4);
-    
+    _sitcm = .;
     *Middlewares/ST/threadx(.text)           /* .data sections  */
     *Middlewares/ST/threadx/*(.text*)        /*  .data* sections */
     *Middlewares/ST/filex/*(.text)

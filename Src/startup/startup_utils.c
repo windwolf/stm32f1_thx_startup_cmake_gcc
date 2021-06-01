@@ -3,6 +3,20 @@
 #include <string.h>
 #include "stm32h7xx_hal.h"
 
+extern uint32_t _ldisr;
+extern uint32_t _eisr;
+extern uint32_t _sisr;
+
+void copy_isr()
+{
+    uint32_t end = (uint32_t)(&_eisr);
+    uint32_t start = (uint32_t)(&_sisr);
+    uint32_t len = end - start;
+    memcpy(&_sisr, &_ldisr, len);
+
+    SCB->VTOR = start;
+}
+
 extern uint32_t _lditcm;
 extern uint32_t _eitcm;
 extern uint32_t _sitcm;
@@ -13,8 +27,6 @@ void copy_itcm()
     uint32_t start = (uint32_t)(&_sitcm);
     uint32_t len = end - start;
     memcpy(&_sitcm, &_lditcm, len);
-
-    SCB->VTOR = D1_ITCMRAM_BASE;
 }
 
 extern uint32_t _sidata;

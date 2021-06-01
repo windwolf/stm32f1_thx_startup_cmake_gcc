@@ -64,6 +64,8 @@ Reset_Handler:
 /* Call the clock system initialization function.*/
   bl  SystemInit
 
+  bl  copy_isr
+
   bl  copy_itcm
 
   bl  copy_data
