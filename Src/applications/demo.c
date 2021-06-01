@@ -5,9 +5,9 @@
 #include "basic/stream.h"
 #include "basic/command.h"
 #include "basic/pin.h"
-#include "device/stream_uart.h"
-#include "device/command_spi.h"
-#include "device/pin_gpio.h"
+#include "stream_device_uart.h"
+#include "packet_io_device_spi.h"
+#include "pin_gpio.h"
 #include "stm32h7xx_ll_spi.h"
 #include "st77xx/st7735.h"
 #include "common/tracex.h"
@@ -56,10 +56,6 @@ void init_driver()
     CommandBase_ConfigCs(&st7735.command.base, &csPin, COMMAND_SELECT_PIN_MODE_UNSELECT);
     CommandBase_ConfigDc(&st7735.command.base, &dcPin, COMMAND_DATACMD_PIN_MODE_DATA);
     ST7735_Init(&st7735);
-
-QSPI_CommandTypeDef cmd;
-cmd.
-    HAL_QSPI_MemoryMapped(&hqspi, )
 }
 
 void tx_application_define(void *first_unused_memory)
@@ -68,7 +64,7 @@ void tx_application_define(void *first_unused_memory)
     init_driver();
     // UartDevice_Init(&uart, &huart4, &buffer2);
     // UartDevice_StartServer(&uart);
-
+    
     CHAR *pointer = NULL;
 
     /* Create a byte memory pool from which to allocate the thread stacks.  */

@@ -54,7 +54,17 @@ dkms.conf
 # log
 *.log
 
+# ozone
+*.jdebug
+*.jdebug.user
+
+# logic
+*.sal
+
 # 编译输出
-build
-cmake-build-debug
-.idea
+build/*
+cmake-build-debug/*
+.idea/*
+
+cubemx/*
+!cubemx/*.ioc
