@@ -57,6 +57,12 @@
         "shared.h": "c",
         "st7735.h": "c",
         "st7789.h": "c",
-        "st77xx.h": "c"
+        "st77xx.h": "c",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "memory_resource": "cpp",
+        "memory": "cpp",
+        "stdexcept": "cpp",
+        "limits": "cpp"
     }
 }
