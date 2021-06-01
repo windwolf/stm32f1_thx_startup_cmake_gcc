@@ -7,7 +7,7 @@ extern "C"
 #endif
 
 #define MDMA_BUFFER __attribute__((section(".d1_buffer")))
-#define DMA1_BUFFER __attribute__((section(".d1_buffer")))
+#define DMA1_BUFFER __attribute__((section(".d2_buffer")))
 #define DMA2_BUFFER __attribute__((section(".d2_buffer")))
 #define BDMA_BUFFER __attribute__((section(".d3_buffer")))
 

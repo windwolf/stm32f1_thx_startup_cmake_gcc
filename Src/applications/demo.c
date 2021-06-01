@@ -14,11 +14,11 @@
 
 Pin csPin;
 Pin dcPin;
-Stream stream;
+DMA1_BUFFER Stream stream;
 DMA1_BUFFER ST77XX st7735;
 extern UART_HandleTypeDef huart4;
 extern SPI_HandleTypeDef hspi4;
-
+extern QSPI_HandleTypeDef hqspi;
 DMA1_BUFFER uint8_t txBuf0[64];
 DMA1_BUFFER uint8_t testRxBuf[65];
 DMA1_BUFFER RingBuffer8 buffer2;
@@ -56,6 +56,10 @@ void init_driver()
     CommandBase_ConfigCs(&st7735.command.base, &csPin, COMMAND_SELECT_PIN_MODE_UNSELECT);
     CommandBase_ConfigDc(&st7735.command.base, &dcPin, COMMAND_DATACMD_PIN_MODE_DATA);
     ST7735_Init(&st7735);
+
+QSPI_CommandTypeDef cmd;
+cmd.
+    HAL_QSPI_MemoryMapped(&hqspi, )
 }
 
 void tx_application_define(void *first_unused_memory)
@@ -120,10 +124,10 @@ void test05()
     uint16_t color0 = 0x28A5;
     uint16_t color1 = 0x001F;
     uint16_t color2 = 0xF800;
-    ST7735_DrawRect(&st7735, 0, 0, st7735.width, st7735.width, color0); //inv:1=red; inv:0=yellow
-    ST7735_DrawHLine(&st7735, 10, 10, 20, color1);                      //inv:1=red+green; inv:0=sky+pink
-    ST7735_DrawRect(&st7735, 20, 20, 10, 10, color2);                   //inv:1=blue; inv:0=sky
-    ST7735_DrawRect(&st7735, 40, 20, 10, 10, color1);                   //inv:1=red; inv:0=yellow
+    ST7735_DrawRect(&st7735, 0, 0, st7735.width, st7735.height, color0); //inv:1=red; inv:0=yellow
+    ST7735_DrawHLine(&st7735, 10, 10, 20, color1);                       //inv:1=red+green; inv:0=sky+pink
+    ST7735_DrawRect(&st7735, 20, 20, 10, 10, color2);                    //inv:1=blue; inv:0=sky
+    ST7735_DrawRect(&st7735, 40, 20, 10, 10, color1);                    //inv:1=red; inv:0=yellow
 }
 
 void thread_0_entry(ULONG thread_input)
