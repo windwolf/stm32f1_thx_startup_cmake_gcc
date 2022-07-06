@@ -9,23 +9,7 @@
 
 extern void SystemClock_Config(void);
 
-int appMain(void)
+void appMain(void)
 {
-  HAL_Init();
-
-  SystemClock_Config();
-
-  MX_GPIO_Init();
-  MX_DMA_Init();
-  // MX_I2C1_Init();
-  MX_USART1_UART_Init();
-  MX_TIM4_Init();
-  MX_USART2_UART_Init();
-  MX_SPI1_Init();
-  MX_SPI2_Init();
-
-  // while (1)
-  {
-    ssd1306_demo();
-  }
+  ssd1306_demo();
 }
