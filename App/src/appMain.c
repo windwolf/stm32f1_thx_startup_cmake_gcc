@@ -9,7 +9,7 @@
 
 extern void SystemClock_Config(void);
 
-int main(void)
+int appMain(void)
 {
   HAL_Init();
 
