@@ -18,7 +18,6 @@ static ST77XX st7735;
 static CanvasInfo canvas = {
     .width = 160,
     .height = 80,
-    .buffer = st7735Buffer,
 };
 static FontDrawInfo fontDrawInfo = {
     .foreColor = 0xFFFF,
@@ -59,7 +58,7 @@ static void test01()
 
 static void test02()
 {
-    FONTS_FillData(&canvas, 0, 0, "windwolf", &Font5x8, &fontDrawInfo);
+    FONTS_FillData(st7735Buffer, &canvas, 0, 0, "windwolf", &Font5x8, &fontDrawInfo);
     st7735_rect_draw(&st7735, 0, 0, 160, 80, st7735Buffer);
 }
 
