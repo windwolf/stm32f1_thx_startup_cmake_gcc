@@ -12,8 +12,12 @@ option(USE_HAL_LIB "Enable HAL library" ON)
 
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
+list(APPEND LIBRARY_NAMES wwDeviceDrivers)
+
 # set(DRIVERS_OS "threadx")
 set(DRIVERS_OS "nortos")
+
+# set(DRIVERS_BSP "stm32h750")
 set(DRIVERS_BSP "stm32f1xx")
 
 # cubemx没有集成threadx的情况下, 额外引入

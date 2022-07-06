@@ -1,9 +1,9 @@
 #include "st77xx_demo.h"
 
-#include "../Drivers/common/inc/common/command.h"
-#include "../Drivers/common/inc/common/device.h"
-#include "../Drivers/device/inc/st77xx/st7735.h"
-#include "../drivers/fonts/inc/fonts/fonts.h"
+#include "common/command.h"
+#include "common/device.h"
+#include "st77xx/st7735.h"
+#include "fonts/fonts.h"
 #include "bsp.h"
 #include "stm32f1xx_hal.h"
 extern SPI_HandleTypeDef hspi1;

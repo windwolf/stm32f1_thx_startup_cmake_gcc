@@ -32,7 +32,9 @@
         "utility": "c",
         "fonts.h": "c",
         "algorithm": "c",
-        "st7735.h": "c"
+        "st7735.h": "c",
+        "log.h": "c",
+        "safe_printf.h": "c"
     },
     "RTT_Studio.Build.Parallel_Jobs": "16",
     "RTT_Studio.Env_Location": "D:/RT-ThreadStudio/platform/env_released/env",

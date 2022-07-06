@@ -5,8 +5,6 @@
 #include "gpio.h"
 #include "spi.h"
 
-#include "utils.h"
-
 #include "ssd1306_demo.h"
 
 extern void SystemClock_Config(void);

@@ -26,6 +26,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 message(STATUS "Building project: ${PROJECT_NAME}")
 
+list(APPEND PROJECT_SOURCES_PATH ${CUBEMX_MW_SOURCES_PATH})
+
 # 设置BUILD_TYPE
 if(NOT CMAKE_BUILD_TYPE)
         set(CMAKE_BUILD_TYPE Debug)
@@ -83,11 +85,6 @@ file(GLOB HAL_CORE_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
 )
 
-# 获取链接文件
-# file(GLOB_RECURSE __TEMP_LD__
-# ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
-# )
-# list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 file(GLOB_RECURSE __TEMP_LD__
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
 )
@@ -100,7 +97,7 @@ else()
 endif()
 
 file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH
-        ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/src/*.*
 )
 
 add_executable(${PROJECT_NAME}
@@ -124,7 +121,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Device/ST/${MCU_SERIES}/Include
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/CMSIS/Include
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/inc
         ${PROJECT_INCLUDES_PATH}
 )
 
@@ -140,14 +137,6 @@ target_link_libraries(${PROJECT_NAME}
         ${PROJECT_LINKS_NAME}
         -lc -lm -lnosys
 )
-
-# drivers
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Src/drivers)
-
-# target_link_libraries(${PROJECT_NAME}
-# PUBLIC
-# drivers
-# )
 
 # ld
 target_link_libraries(${PROJECT_NAME}
@@ -170,6 +159,10 @@ if(USE_FULL_ASSERT)
         target_compile_definitions(${PROJECT_NAME}
                 PUBLIC -DUSE_FULL_ASSERT)
 endif()
+
+foreach(ln ${LIBRARY_NAMES})
+        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/${ln})
+endforeach()
 
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)

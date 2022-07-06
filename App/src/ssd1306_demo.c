@@ -1,8 +1,11 @@
-#include "inc/ssd1306_demo.h"
+#include "ssd1306_demo.h"
 #include "common/device.h"
 #include "ssd1306/ssd1306.h"
 #include "bsp.h"
 #include "fonts/fonts.h"
+
+#define LOG_MODULE "SSD1306demo"
+#include "log.h"
 
 PinDevice scl;
 PinDevice sda;
@@ -60,5 +63,6 @@ void ssd1306_demo(void)
     {
         FONTS_FillData(&canvasInfo, 0, 0, "!!", &Font6x8_v, &fontDrawInfo);
         ssd1306_draw(&ZJ0_91in);
+        LOG_I("draw finished.");
     }
 }
