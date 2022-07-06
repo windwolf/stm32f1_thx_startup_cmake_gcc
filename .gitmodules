@@ -1,6 +1,6 @@
-[submodule "libs/tinyutils"]
-	path = libs/tinyutils
-	url = ../tinyutils.git
 [submodule "libs/wwDeviceDrivers"]
 	path = libs/wwDeviceDrivers
 	url = ../wwDeviceDrivers.git
+[submodule "libs/wwUtils"]
+	path = libs/wwUtils
+	url = ../wwUtils.git
