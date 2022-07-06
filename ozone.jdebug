@@ -4,9 +4,9 @@
 *                         www.segger.com                             *
 **********************************************************************
 
-File          : E:/topic/startup/stm32_threadx_startup/stm32f103c8t6.jdebug
-Created       : 2 Apr 2021 21:37
-Ozone Version : V3.22b
+File          : D:/EE/projects/startup/stm32f1_thx_startup_cmake_gcc/ozone.jdebug
+Created       : 3 Jul 2022 16:12
+Ozone Version : V3.26d
 */
 
 /*********************************************************************
@@ -22,14 +22,14 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("E:/topic/startup/stm32_threadx_startup", "$(ProjectDir)");
-  Project.AddPathSubstitute ("e:/topic/startup/stm32_threadx_startup", "$(ProjectDir)");
+  Project.AddPathSubstitute ("D:/EE/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
+  Project.AddPathSubstitute ("d:/ee/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
   Project.SetDevice ("STM32F103C8");
-  Project.SetHostIF ("USB", "");
+  Project.SetHostIF ("USB", "50120677");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M3.svd");
-  Project.AddSvdFile ("C:/Program Files/STMicroelectronics/STM32Cube/STM32CubeProgrammer/SVD/STM32F103.svd");
+  Project.AddSvdFile ("D:/EE/docs/svd/STM32F1/STM32F103xx.svd");
   //
   // User settings
   //
@@ -298,6 +298,18 @@ void AfterTargetDownload (void) {
 **********************************************************************
 */
 //void OnError (void) {
+//}
+
+/*********************************************************************
+*
+*       AfterProjectLoad
+*
+* Function description
+*   After Project load routine. Optional.
+*
+**********************************************************************
+*/
+//void AfterProjectLoad (void) {
 //}
 
 /*********************************************************************

@@ -6,10 +6,8 @@
 #include "../drivers/fonts/inc/fonts/fonts.h"
 #include "bsp.h"
 #include "stm32f1xx_hal.h"
-#include "tx_api.h"
-
 extern SPI_HandleTypeDef hspi1;
-static PinDevice csPin;
+// static PinDevice csPin;
 static PinDevice dcPin;
 static SpiDevice spi1Dev;
 static SpiWithPinsDevice spi1pDev;

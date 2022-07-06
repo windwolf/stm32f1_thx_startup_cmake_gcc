@@ -17,12 +17,12 @@ set(DRIVERS_OS "nortos")
 set(DRIVERS_BSP "stm32f1xx")
 
 # cubemx没有集成threadx的情况下, 额外引入
-string(REPLACE "-" "_" THREADX_ARCH ${CPU})
-message(STATUS "THREADX_ARCH=${THREADX_ARCH}")
-set(THREADX_TOOLCHAIN "gnu")
-message(STATUS "THREADX_TOOLCHAIN=${THREADX_TOOLCHAIN}")
-set(TX_USER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc/tx_user.h)
-add_project_library(threadx azrtos::threadx)
+# string(REPLACE "-" "_" THREADX_ARCH ${CPU})
+# message(STATUS "THREADX_ARCH=${THREADX_ARCH}")
+# set(THREADX_TOOLCHAIN "gnu")
+# message(STATUS "THREADX_TOOLCHAIN=${THREADX_TOOLCHAIN}")
+# set(TX_USER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/inc/tx_user.h)
+# add_project_library(threadx azrtos::threadx)
 
 # cubemx集成threadx
 # file(GLOB_RECURSE CUBEMX_MW_SOURCES_PATH

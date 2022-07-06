@@ -24,16 +24,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 project(${PROJECT_NAME} C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
 
-# 获取链接文件
-# file(GLOB_RECURSE __TEMP_LD__
-# ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
-# )
-# list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
-file(GLOB_RECURSE __TEMP_LD__
-        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.ld
-)
-list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
-
 message(STATUS "Building project: ${PROJECT_NAME}")
 
 # 设置BUILD_TYPE
@@ -69,8 +59,6 @@ message(STATUS "Use LL library: ${USE_LL_LIB}")
 message(STATUS "Use HAL library: ${USE_HAL_LIB}")
 message(STATUS "Use Segger SystemView library: ${USE_SYSTEM_VIEW}")
 
-
-
 # # 版本信息
 set(VERSION_MAJOR 0 CACHE STRING "Project major version number.")
 set(VERSION_MINOR 1 CACHE STRING "Project minor version number.")
@@ -92,8 +80,18 @@ list(FILTER HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
 file(GLOB HAL_CORE_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
 
-        # ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
 )
+
+# 获取链接文件
+# file(GLOB_RECURSE __TEMP_LD__
+# ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+# )
+# list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
+file(GLOB_RECURSE __TEMP_LD__
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+)
+list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
 
 if(USE_HAL_LIB)
         set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_HAL_SRC} ${HAL_DRIVER_LL_SRC})
@@ -103,8 +101,6 @@ endif()
 
 file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH
         ${CMAKE_CURRENT_SOURCE_DIR}/Src/applications/*.*
-        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.s
-        ${CMAKE_CURRENT_SOURCE_DIR}/Src/startup/*.c
 )
 
 add_executable(${PROJECT_NAME}

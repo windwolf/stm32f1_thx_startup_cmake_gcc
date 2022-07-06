@@ -1,6 +1,5 @@
 #include "main.h"
 #include "dma.h"
-#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -8,7 +7,7 @@
 
 #include "utils.h"
 
-#include "st77xx_demo.h"
+#include "ssd1306_demo.h"
 
 extern void SystemClock_Config(void);
 
@@ -20,7 +19,7 @@ int main(void)
 
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_I2C1_Init();
+  // MX_I2C1_Init();
   MX_USART1_UART_Init();
   MX_TIM4_Init();
   MX_USART2_UART_Init();
@@ -29,6 +28,6 @@ int main(void)
 
   // while (1)
   {
-    st77xx_demo();
+    ssd1306_demo();
   }
 }
