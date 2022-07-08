@@ -1,6 +1,6 @@
 #include "ssd1306_demo.h"
 #include "common/device.h"
-#include "ssd1306/ssd1306.h"
+#include "device/ssd1306.h"
 #include "bsp.h"
 #include "fonts/fonts.h"
 

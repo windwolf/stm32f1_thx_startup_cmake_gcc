@@ -2,7 +2,7 @@
 
 #include "common/command.h"
 #include "common/device.h"
-#include "st77xx/st7735.h"
+#include "device/st7735.h"
 #include "fonts/fonts.h"
 #include "bsp.h"
 #include "stm32f1xx_hal.h"
@@ -40,26 +40,26 @@ static void init()
     // st77xx_inversion(&st7735, 1);
     for (size_t i = 0; i < LCD_DATA_SIZE; i++)
     {
-        lcddata[i] = (0xF800);
+        lcddata[i] = (0xF8);
     }
 }
 
-static void test01()
-{
-    uint16_t color0 = 0x28A5;
-    // uint16_t color1 = 0x001F;
-    uint16_t color2 = 0xF800;
-    uint16_t color3 = 0x04F1;
-    st7735_rect_fill(&st7735, 0, 0, st7735.width, st7735.height, color0); // inv:1=red; inv:0=yellow
-    // st7735_hline_draw(&st7735, 10, 10, 20, color1);                       // inv:1=red+green; inv:0=sky+pink
-    st7735_rect_fill(&st7735, 20, 20, 30, 30, color2); // inv:1=blue; inv:0=sky
-    st7735_rect_fill(&st7735, 40, 20, 50, 50, color3); // inv:1=red; inv:0=yellow
-}
+// static void test01()
+// {
+//     uint16_t color0 = 0x28A5;
+//     // uint16_t color1 = 0x001F;
+//     uint16_t color2 = 0xF800;
+//     uint16_t color3 = 0x04F1;
+//     st7735_rect_fill(&st7735, 0, 0, st7735.width, st7735.height, color0); // inv:1=red; inv:0=yellow
+//     // st7735_hline_draw(&st7735, 10, 10, 20, color1);                       // inv:1=red+green; inv:0=sky+pink
+//     st7735_rect_fill(&st7735, 20, 20, 30, 30, color2); // inv:1=blue; inv:0=sky
+//     st7735_rect_fill(&st7735, 40, 20, 50, 50, color3); // inv:1=red; inv:0=yellow
+// }
 
 static void test02()
 {
     FONTS_FillData(st7735Buffer, &canvas, 0, 0, "windwolf", &Font5x8, &fontDrawInfo);
-    st7735_rect_draw(&st7735, 0, 0, 160, 80, st7735Buffer);
+    st7735_rect_draw(&st7735, 0, 0, 160, 80, (uint16_t *)st7735Buffer);
 }
 
 void st77xx_demo()

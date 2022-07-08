@@ -49,12 +49,13 @@ endfunction()
 
 function(process_src_dir dir prject_name)
     # driver的OS port
-    list_source_files(${dir}/src source_files)
+    list_source_files(${dir} source_files)
     target_sources(${prject_name}
         PRIVATE
         ${source_files}
     )
     target_include_directories(${prject_name}
         PRIVATE
-        ${dir}/inc)
+        ${dir}
+        ${dir}/..)
 endfunction()

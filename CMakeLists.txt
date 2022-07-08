@@ -173,5 +173,5 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
 
 message(STATUS "cmake config finish.")
 
-# # debug
+# debug
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-jlink.cmake)
