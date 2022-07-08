@@ -5,7 +5,7 @@
 **********************************************************************
 
 File          : D:/EE/projects/startup/stm32f1_thx_startup_cmake_gcc/ozone.jdebug
-Created       : 3 Jul 2022 16:12
+Created       : 7 Jul 2022 15:37
 Ozone Version : V3.26d
 */
 
@@ -22,12 +22,12 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("D:/EE/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
-  Project.AddPathSubstitute ("d:/ee/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
   Project.SetDevice ("STM32F103C8");
-  Project.SetHostIF ("USB", "50120677");
+  Project.SetHostIF ("USB", "261006810");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
+  Project.AddPathSubstitute ("D:/EE/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
+  Project.AddPathSubstitute ("d:/ee/projects/startup/stm32f1_thx_startup_cmake_gcc", "$(ProjectDir)");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M3.svd");
   Project.AddSvdFile ("D:/EE/docs/svd/STM32F1/STM32F103xx.svd");
   //
