@@ -70,6 +70,7 @@ if(USE_SYSTEM_VIEW)
         add_definitions("-DENABLE_SYSTEMVIEW")
 endif()
 
+# ########## CubeMx MW ##############
 file(GLOB_RECURSE HAL_DRIVER_HAL_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
@@ -95,10 +96,6 @@ if(USE_HAL_LIB)
 else()
         set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_LL_SRC})
 endif()
-
-file(GLOB_RECURSE PROJECT_APP_AND_STARTUP_SOURCES_PATH
-        ${CMAKE_CURRENT_SOURCE_DIR}/App/src/*.*
-)
 
 add_executable(${PROJECT_NAME}
         ${HAL_CORE_SRC}
@@ -160,6 +157,7 @@ if(USE_FULL_ASSERT)
                 PUBLIC -DUSE_FULL_ASSERT)
 endif()
 
+# ###### Load Libs ###############
 list_library_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs LIBRARY_NAMES CMakeLists.txt)
 
 foreach(ln ${LIBRARY_NAMES})
@@ -168,10 +166,13 @@ foreach(ln ${LIBRARY_NAMES})
         message(STATUS "lib: ${ln} loaded.")
 endforeach()
 
+# ###### Load App ###################
+process_src_dir(${CMAKE_CURRENT_LIST_DIR}/App ${PROJECT_NAME})
+
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
 
 message(STATUS "cmake config finish.")
 
-# debug
+# # debug
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-jlink.cmake)
