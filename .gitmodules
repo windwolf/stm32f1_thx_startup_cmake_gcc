@@ -1,0 +1,6 @@
+[submodule "libs/wwDevice"]
+	path = libs/wwDevice
+	url = ../wwDevice.git
+[submodule "libs/wwBase"]
+	path = libs/wwBase
+	url = ../wwBase.git

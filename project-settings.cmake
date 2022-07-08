@@ -12,13 +12,11 @@ option(USE_HAL_LIB "Enable HAL library" ON)
 
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
 
-list(APPEND LIBRARY_NAMES wwDeviceDrivers)
-
 # set(DRIVERS_OS "threadx")
-set(DRIVERS_OS "nortos")
+set(BASE_OS_PORT_NAME "nortos")
 
 # set(DRIVERS_BSP "stm32h750")
-set(DRIVERS_BSP "stm32f1xx")
+set(DRIVERS_BSP_PORT_NAME "stm32f1xx")
 
 # cubemx没有集成threadx的情况下, 额外引入
 # string(REPLACE "-" "_" THREADX_ARCH ${CPU})
@@ -57,9 +55,3 @@ set(DRIVERS_BSP "stm32f1xx")
 
 # target_compile_definitions(${ELF_TARGET}
 # PUBLIC -DFX_INCLUDE_USER_DEFINE_FILE)
-
-# TODO: 内部组件
-add_project_component(common)
-
-# add_project_component(uart_print)
-add_project_component(rtt_print)

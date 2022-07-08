@@ -160,8 +160,12 @@ if(USE_FULL_ASSERT)
                 PUBLIC -DUSE_FULL_ASSERT)
 endif()
 
+list_library_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs LIBRARY_NAMES CMakeLists.txt)
+
 foreach(ln ${LIBRARY_NAMES})
-        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/${ln})
+        message(STATUS "lib: ${ln} loading...")
+        add_subdirectory(${ln})
+        message(STATUS "lib: ${ln} loaded.")
 endforeach()
 
 # post build
