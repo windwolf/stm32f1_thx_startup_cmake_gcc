@@ -21,12 +21,13 @@ list(APPEND PROJECT_LINKS_NAME)
 # 导入目标文件定义
 include(${CMAKE_CURRENT_SOURCE_DIR}/project-settings.cmake)
 
+# 导入目标对应的变量或者选项. 这行不要动
+include(${CMAKE_SOURCE_DIR}/cmake/target-port.cmake)
+
 project(${PROJECT_NAME} C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
 
 message(STATUS "Building project: ${PROJECT_NAME}")
-
-list(APPEND PROJECT_SOURCES_PATH ${CUBEMX_MW_SOURCES_PATH})
 
 # 设置BUILD_TYPE
 if(NOT CMAKE_BUILD_TYPE)
@@ -71,44 +72,42 @@ if(USE_SYSTEM_VIEW)
 endif()
 
 # ########## CubeMx MW ##############
-file(GLOB_RECURSE HAL_DRIVER_HAL_SRC
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
-list(FILTER HAL_DRIVER_HAL_SRC EXCLUDE REGEX "(_template.c)$")
-
-file(GLOB_RECURSE HAL_DRIVER_LL_SRC
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_ll_*.c)
-list(FILTER HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
-
-file(GLOB HAL_CORE_SRC
+file(GLOB CUBEMX_HAL_CORE_SRC
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Core/Src/*.*
 
         ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.s
 )
 
-file(GLOB_RECURSE __TEMP_LD__
-        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
-)
-list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
+add_executable(${PROJECT_NAME} ${CUBEMX_HAL_CORE_SRC})
+
+file(GLOB_RECURSE CUBEMX_HAL_DRIVER_HAL_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_hal_*.c)
+list(FILTER CUBEMX_HAL_DRIVER_HAL_SRC EXCLUDE REGEX "(_template.c)$")
+
+file(GLOB_RECURSE CUBEMX_HAL_DRIVER_LL_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/Drivers/${MCU_SERIES}_HAL_Driver/Src/*_ll_*.c)
+list(FILTER CUBEMX_HAL_DRIVER_LL_SRC EXCLUDE REGEX "(_template.c)$")
 
 if(USE_HAL_LIB)
-        set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_HAL_SRC} ${HAL_DRIVER_LL_SRC})
+        target_sources(${PROJECT_NAME}
+                PRIVATE
+                ${CUBEMX_HAL_DRIVER_HAL_SRC}
+                ${CUBEMX_HAL_DRIVER_LL_SRC})
+        target_compile_definitions(${PROJECT_NAME}
+                PUBLIC -DUSE_HAL_DRIVER)
 else()
-        set(HAL_DRIVER_LIB_SRC ${HAL_DRIVER_LL_SRC})
+        target_sources(${PROJECT_NAME}
+                PRIVATE
+                ${CUBEMX_HAL_DRIVER_LL_SRC})
+        target_compile_definitions(${PROJECT_NAME}
+                PUBLIC -DUSE_FULL_LL_DRIVER)
 endif()
 
-add_executable(${PROJECT_NAME}
-        ${HAL_CORE_SRC}
-        ${HAL_DRIVER_LIB_SRC}
-        ${PROJECT_APP_AND_STARTUP_SOURCES_PATH}
-        ${PROJECT_SOURCES_PATH}
-        ${PROJECT_CUBEMX_SOURCES_PATH}
-)
-
-target_compile_definitions(${PROJECT_NAME}
-        PUBLIC
-        -D${MCU_LINE}
-)
+if(USE_FULL_ASSERT)
+        target_compile_definitions(${PROJECT_NAME}
+                PUBLIC -DUSE_FULL_ASSERT)
+endif()
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
@@ -122,40 +121,37 @@ target_include_directories(${PROJECT_NAME}
         ${PROJECT_INCLUDES_PATH}
 )
 
+include(${CMAKE_SOURCE_DIR}/os_port.cmake)
+
 target_compile_definitions(${PROJECT_NAME}
         PUBLIC
         -DTX_INCLUDE_USER_DEFINE_FILE
         -DFX_INCLUDE_USER_DEFINE_FILE
 )
 
-# libs
-target_link_libraries(${PROJECT_NAME}
+# # link
+# target_link_libraries(${PROJECT_NAME}
+# PUBLIC
+# ${PROJECT_LINKS_NAME}
+# -lc -lm -lnosys
+# )
+
+# gcc flags
+target_compile_definitions(${PROJECT_NAME}
         PUBLIC
-        ${PROJECT_LINKS_NAME}
-        -lc -lm -lnosys
+        -D${MCU_LINE}
 )
 
 # ld
+file(GLOB_RECURSE __TEMP_LD__
+        ${CMAKE_CURRENT_SOURCE_DIR}/cubemx/*.ld
+)
+list(GET __TEMP_LD__ 0 LINKER_SCRIPT)
+
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
         -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS}
 )
-
-# cubemx
-if(USE_LL_LIB)
-        target_compile_definitions(${PROJECT_NAME}
-                PUBLIC -DUSE_FULL_LL_DRIVER)
-endif()
-
-if(USE_HAL_LIB)
-        target_compile_definitions(${PROJECT_NAME}
-                PUBLIC -DUSE_HAL_DRIVER)
-endif()
-
-if(USE_FULL_ASSERT)
-        target_compile_definitions(${PROJECT_NAME}
-                PUBLIC -DUSE_FULL_ASSERT)
-endif()
 
 # ###### Load Libs ###############
 list_library_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs LIBRARY_NAMES CMakeLists.txt)
