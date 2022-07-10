@@ -111,16 +111,21 @@ void ssd1306_demo(void)
         FONTS_FillData(ZJ0_96in.data_buffer, &canvasInfo_ZJ0_96in, 0, 48, "6789ABCDEFGHIJK012345", &Font6x8_v, &fontDrawInfo);
         FONTS_FillData(ZJ0_96in.data_buffer, &canvasInfo_ZJ0_96in, 0, 56, "789ABCDEFGHIJK0123456", &Font6x8_v, &fontDrawInfo);
         ssd1306_draw(&ZJ0_96in);
+        LOG_I("0.96in OLED drawed");
 
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 0, "0123456789ABCDEFGHIJK", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 8, "123456789ABCDEFGHIJK0", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 16, "23456789ABCDEFGHIJK01", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 24, "3456789ABCDEFGHIJK012", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 32, "456789ABCDEFGHIJK0123", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 40, "56789ABCDEFGHIJK01234", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 48, "6789ABCDEFGHIJK012345", &Font6x8_v, &fontDrawInfo);
-        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 56, "789ABCDEFGHIJK0123456", &Font6x8_v, &fontDrawInfo);
+        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 0, "0", &Font6x8_v, &fontDrawInfo);
+        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 8, "1", &Font6x8_v, &fontDrawInfo);
+        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 16, "2", &Font6x8_v, &fontDrawInfo);
+        FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 24, "3", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 0, "0123456789ABCDEFGHIJK", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 8, "123456789ABCDEFGHIJK0", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 16, "23456789ABCDEFGHIJK01", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 24, "3456789ABCDEFGHIJK012", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 32, "456789ABCDEFGHIJK0123", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 40, "56789ABCDEFGHIJK01234", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 48, "6789ABCDEFGHIJK012345", &Font6x8_v, &fontDrawInfo);
+        // FONTS_FillData(ZJ0_91in.data_buffer, &canvasInfo_ZJ0_91in, 0, 56, "789ABCDEFGHIJK0123456", &Font6x8_v, &fontDrawInfo);
         ssd1306_draw(&ZJ0_91in);
-        LOG_I("draw finished.");
+        LOG_I("0.91in OLED drawed");
     }
 }
