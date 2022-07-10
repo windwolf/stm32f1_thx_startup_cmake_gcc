@@ -13,7 +13,19 @@
             "servertype": "jlink",
             "interface": "swd",
             "device": "STM32F103C8",
-            "svdFile": "D:\\EE\\docs\\svd\\STM32F1\\STM32F103xx.svd"
+            "svdFile": "D:\\EE\\docs\\svd\\STM32F1\\STM32F103xx.svd",
+            "runToEntryPoint": "main",
+            "rttConfig": {
+                "enabled": true,
+                "address": "auto",
+                "decoders": [
+                    {
+                        "label": "",
+                        "port": 0,
+                        "type": "console"
+                    }
+                ]
+            }
         }
     ]
 }

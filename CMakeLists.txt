@@ -165,6 +165,8 @@ endforeach()
 # ###### Load App ###################
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/App ${PROJECT_NAME})
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC -D${PROJECT_BUILD_TYPE})
+
 # post build
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32-gcc-postbuild.cmake)
 
