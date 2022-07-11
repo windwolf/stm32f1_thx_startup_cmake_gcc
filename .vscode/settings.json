@@ -40,7 +40,14 @@
         "memory_resource": "c",
         "memory": "c",
         "ostream": "c",
-        "streambuf": "c"
+        "streambuf": "c",
+        "segger_rtt.h": "c",
+        "cstdarg": "c",
+        "stdint.h": "c",
+        "gpio.h": "c",
+        "main.h": "c",
+        "usart.h": "c",
+        "cmsis_gcc.h": "c"
     },
     "RTT_Studio.Build.Parallel_Jobs": "16",
     "RTT_Studio.Env_Location": "D:/RT-ThreadStudio/platform/env_released/env",
