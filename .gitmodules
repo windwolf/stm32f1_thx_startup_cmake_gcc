@@ -4,3 +4,6 @@
 [submodule "libs/wwBase"]
 	path = libs/wwBase
 	url = ../wwBase.git
+[submodule "libs/wwCmake"]
+	path = libs/wwCmake
+	url = ../wwCmake.git

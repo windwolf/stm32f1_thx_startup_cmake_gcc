@@ -9,7 +9,7 @@ set(TARGET_MCU "STM32F103C8T6")
 option(USE_LL_LIB "Enable LL library" ON)
 option(USE_HAL_LIB "Enable HAL library" ON)
 option(USE_SYSTEM_VIEW "Enable Segger SystemView library" OFF)
-option(USE_UART_PRINT "Enable USE_UART_PRINT" ON)
+option(USE_UART_PRINT "Enable USE_UART_PRINT" OFF)
 option(USE_RTT_PRINT "Enable USE_RTT_PRINT" ON)
 
 # set(OS_PORT "threadx")
